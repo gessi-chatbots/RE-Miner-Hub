@@ -2,6 +2,9 @@ import openai
 import os
 import json
 import time
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Set your API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -96,6 +99,31 @@ def chat_completion(model, messages, temperature):
 
     print(f'Completion with temperature {temperature}: ', completion.choices[0].message)
 
+def convert_to_serializable(item):
+    if isinstance(item, set):
+        return list(item)
+    else:
+        return item
+
+def generate_chat_completion_results(model):
+    generated_completion = []
+    with open("../data/test_dataset_content.txt", "r") as test_data:
+        for line in test_data:
+            print('Message: ', line)
+            line_obj = {line.strip()}
+            generated_completion.append(line_obj)
+            messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": line}]
+            chat_completion(model, messages, 0.2)
+            generated_completion.append({completion_low_temperature.choices[0].message["content"].strip()})
+            chat_completion(model, messages, 0.8)
+            generated_completion.append({completion_high_temperature.choices[0].message["content"].strip()})
+    
+    generated_completion = [convert_to_serializable(item) for item in generated_completion]
+    with open("../results/completion_result.json", "w") as result_file:
+        json.dump(generated_completion, result_file, indent=4)
+
+    print("Results saved in ../results/completion_result.json")
+
 def main():
     # NOTE: You can change this to any dataset you want to fine-tune on
     training_dataset = "../data/training_dataset.jsonl"
@@ -113,13 +141,10 @@ def main():
     result_files_id = fine_tuned_job["result_files"][0]
     content = openai.File.download(result_files_id)
 
-    # Create chat completion
+    # Create chat completion and generate result file
     # model = "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8DJxRmih"
     model = fine_tuned_job["fine_tuned_model"]
-    messages = "../data/test_dataset.jsonl"
-    chat_completion(model, messages, 0.2)
-    chat_completion(model, messages, 0.8)
-
+    generate_chat_completion_results(model)
 
 if __name__ == '__main__':
     main()

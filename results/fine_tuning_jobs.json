@@ -1,0 +1,46 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "object": "fine_tuning.job",
+      "id": "ftjob-u6afRdtflMKM5A8YkQdjlk5X",
+      "model": "gpt-3.5-turbo-0613",
+      "created_at": 1698185147,
+      "finished_at": 1698185671,
+      "fine_tuned_model": "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8DJxRmih",
+      "organization_id": "org-2cE3xRWOAGsLIhsbPAFxeiu9",
+      "result_files": [
+        "file-YFcTIB3ySzoxNVuYnUk4pd8h"
+      ],
+      "status": "succeeded",
+      "validation_file": null,
+      "training_file": "file-acE7WaFLmYCnUK79oGlMzSOq",
+      "hyperparameters": {
+        "n_epochs": 3
+      },
+      "trained_tokens": 9069,
+      "error": null
+    },
+    {
+      "object": "fine_tuning.job",
+      "id": "ftjob-UzceG4VVWvpkPo26y0vNMHT4",
+      "model": "gpt-3.5-turbo-0613",
+      "created_at": 1698179986,
+      "finished_at": 1698180768,
+      "fine_tuned_model": "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8DIgKCqi",
+      "organization_id": "org-2cE3xRWOAGsLIhsbPAFxeiu9",
+      "result_files": [
+        "file-zTvdzyZYaj5hcT6cTDJx4UYO"
+      ],
+      "status": "succeeded",
+      "validation_file": null,
+      "training_file": "file-EcVAOutqPaoR7zXTcH3rADod",
+      "hyperparameters": {
+        "n_epochs": 3
+      },
+      "trained_tokens": 12744,
+      "error": null
+    }
+  ],
+  "has_more": false
+}

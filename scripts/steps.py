@@ -3,12 +3,12 @@ import os
 import json
 
 # Set your API key
-openai.api_key = "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"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 #--------------------------VALIDATE DATA-------------------------------------
 
 # NOTE: You can change this to any dataset you want to fine-tune on
-data_path = "datasets/training_dataset.jsonl"
+data_path = "../data/training_dataset.jsonl"
 
 # Load the dataset
 with open(data_path, 'r', encoding='utf-8') as f:
@@ -89,7 +89,7 @@ else:
     #--------------------------CREATE CHAT COMPLETION----------------------------
     model = fine_tuned_job["fine_tuned_model"]
     # NOTE: You can change this to any dataset you want to test on
-    messages = "datasets/test_dataset.jsonl"
+    messages = "../data/test_dataset.jsonl"
 
     completion_low_temperature = openai.ChatCompletion.create(
         model=model,

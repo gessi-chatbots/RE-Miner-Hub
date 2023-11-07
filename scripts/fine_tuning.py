@@ -4,7 +4,7 @@ import json
 import time
 
 # Set your API key
-openai.api_key = "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"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def valid_data(data_path):
     # Load the dataset
@@ -98,7 +98,7 @@ def chat_completion(model, messages, temperature):
 
 def main():
     # NOTE: You can change this to any dataset you want to fine-tune on
-    training_dataset = "datasets/training_dataset.jsonl"
+    training_dataset = "../data/training_dataset.jsonl"
 
     if not valid_data(training_dataset):
         return
@@ -116,7 +116,7 @@ def main():
     # Create chat completion
     # model = "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8DJxRmih"
     model = fine_tuned_job["fine_tuned_model"]
-    messages = "datasets/test_dataset.jsonl"
+    messages = "../data/test_dataset.jsonl"
     chat_completion(model, messages, 0.2)
     chat_completion(model, messages, 0.8)
 

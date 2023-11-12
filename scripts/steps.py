@@ -93,27 +93,28 @@ else:
     model = fine_tuned_job["fine_tuned_model"]
     generated_completion = []
 
+    # NOTE: You can change this to any dataset you want to test
     with open("../data/test_dataset_content.txt", "r") as test_data:
         for line in test_data:
             print('Message: ', line)
             line_obj = {line.strip()}
-            generated_completion.append(line_obj)
+            generated_completion.append('Message: ' + line_obj)
 
             completion_low_temperature = openai.ChatCompletion.create(
                 model=model,
-                messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": line}],
+                messages=[{"role": "system", "content": "Can you tell me what emotion is expressing the message above? It can be one of the following: happiness, sadness, anger, fear, surprise or disgust."}, {"role": "user", "content": line}],
                 temperature=0.2
             )
             print('Completion low temperature: ', completion_low_temperature.choices[0].message)
-            generated_completion.append({completion_low_temperature.choices[0].message["content"].strip()})
+            generated_completion.append('Completion with low temperature: ' + {completion_low_temperature.choices[0].message["content"].strip()})
 
             completion_high_temperature = openai.ChatCompletion.create(
                 model=model,
-                messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": line}],
+                messages=[{"role": "system", "content": "Can you tell me what emotion is expressing the message above? It can be one of the following: happiness, sadness, anger, fear, surprise or disgust."}, {"role": "user", "content": line}],
                 temperature=0.8
             )
             print('Completion high temperature: ', completion_high_temperature.choices[0].message)
-            generated_completion.append({completion_high_temperature.choices[0].message["content"].strip()})
+            generated_completion.append('Completion with high temperature: ' + {completion_high_temperature.choices[0].message["content"].strip()})
 
     def convert_to_serializable(item):
         if isinstance(item, set):
@@ -123,7 +124,11 @@ else:
 
     generated_completion = [convert_to_serializable(item) for item in generated_completion]
 
-    with open("../results/completion_result.json", "w") as result_file:
-        json.dump(generated_completion, result_file, indent=4)
+    existing_files = [item_file for item_file in os.listdir() if item_file.startswith('completion_result') and item_file.endswith('.json')]
+    next_number = 0 if not existing_files else len(existing_files) + 1
+    file_name = f'completion_result{next_number}.json'
 
-    print("Results saved in ../results/completion_result.json")
+    with open("../results/" + file_name, 'w') as result_file:
+        json.dump(content, result_file, indent=4)
+
+    print("Results saved in ../results/" + file_name)

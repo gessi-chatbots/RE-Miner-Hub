@@ -13,37 +13,38 @@ model = "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8DJxRmih" #
 
 generated_completion = []
 
-with open("../data/test_dataset_content.txt", "r") as test_data:
+# NOTE: You can change this to any dataset you want to test
+with open("./data/test_dataset.jsonl", "r") as test_data:
     for line in test_data:
-        print('Message: ', line)
-        line_obj = {line.strip()}
-        generated_completion.append(line_obj)
+        data = json.loads(line)
+        data_message = data.get("messages")
+        user_review = data_message[1].get("content")
+        print('User review: ', user_review)
 
         completion_low_temperature = openai.ChatCompletion.create(
             model=model,
-            messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": line}],
+            messages=data_message,
             temperature=0.2
         )
-        print('Completion low temperature: ', completion_low_temperature.choices[0].message)
-        generated_completion.append({completion_low_temperature.choices[0].message["content"].strip()})
+        print('Completion low temperature: ', completion_low_temperature.choices[0].message.content)
 
         completion_high_temperature = openai.ChatCompletion.create(
             model=model,
-            messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": line}],
+            messages=data_message,
             temperature=0.8
         )
-        print('Completion high temperature: ', completion_high_temperature.choices[0].message)
-        generated_completion.append({completion_high_temperature.choices[0].message["content"].strip()})
-
-def convert_to_serializable(item):
-    if isinstance(item, set):
-        return list(item)
-    else:
-        return item
-
+        print('Completion high temperature: ', completion_high_temperature.choices[0].message.content)
+        result = ['User review: ' + user_review, 'Chat completion with temperature 0.2: ' + completion_low_temperature.choices[0].message.content, 'Chat completion with temperature 0.8: ' + completion_high_temperature.choices[0].message.content]
+        generated_completion.append(result)
+    
 generated_completion = [convert_to_serializable(item) for item in generated_completion]
 
-with open("../results/completion_result.json", "w") as result_file:
+path = "results/"
+existing_files = [item_file for item_file in os.listdir(path) if item_file.startswith('chat_completion_result_') and item_file.endswith('.json')]
+next_number = 0 if not existing_files else len(existing_files) + 1
+file_name = f'chat_completion_result_{next_number}.json'
+
+with open(path + file_name, 'w') as result_file:
     json.dump(generated_completion, result_file, indent=4)
 
-print("Results saved in ../results/completion_result.json")
+print(f"Results saved in {path}{file_name}")

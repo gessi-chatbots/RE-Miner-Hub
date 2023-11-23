@@ -1,0 +1,22 @@
+{
+    "id": "ftjob-OTI2hGnHSby2HwqjCzUEsyAa",
+    "created_at": 1700733740,
+    "error": null,
+    "fine_tuned_model": "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8O0z8ASC",
+    "finished_at": 1700734349,
+    "hyperparameters": {
+        "n_epochs": 3,
+        "batch_size": 1,
+        "learning_rate_multiplier": 2
+    },
+    "model": "gpt-3.5-turbo-0613",
+    "object": "fine_tuning.job",
+    "organization_id": "org-2cE3xRWOAGsLIhsbPAFxeiu9",
+    "result_files": [
+        "file-Jnb9Oomxo7QJoEiGGGfzr5de"
+    ],
+    "status": "succeeded",
+    "trained_tokens": 16314,
+    "training_file": "file-1cuntdfpaMJmkFmqhsubOAku",
+    "validation_file": null
+}

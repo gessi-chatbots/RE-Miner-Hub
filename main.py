@@ -75,25 +75,6 @@ def valid_data_jsonl(data_path, isTrainingData):
     print("\033[92m\u2714 " + "No errors found")
     return True
 
-def valid_data_txt(data_path):
-    print("\033[0m" + "Starting valid_data_txt...")
-    try:
-        with open(data_path, 'r', encoding='utf-8') as txt_file:
-            for linea in txt_file:
-                if not (linea.startswith('"') and linea.endswith('"')):
-                    return False
-
-    except FileNotFoundError:
-        print(f"The file '{data_path}' was not found.")
-        return False
-
-    except Exception as e:
-        print("\033[91m\u2718 " + f"An error occurred: {e}")
-        return False
-
-    print("\033[92m\u2714 " + "No errors found")
-    return True
-
 def upload_file(file_path):
     print("\033[0m" + "Starting upload_file...")
     try:
@@ -256,8 +237,6 @@ def main():
     # NOTE: You can change this to any dataset you want to test
     test_dataset = "./data/test_dataset.jsonl"
     
-    # !: In case of test_dataset = "../data/test_dataset_content.txt", call valid_data_txt(test_dataset)
-
     if not valid_data_jsonl(training_dataset, True) or not valid_data_jsonl(test_dataset, False):
         return
 

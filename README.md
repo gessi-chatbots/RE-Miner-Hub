@@ -27,7 +27,6 @@ Aquest sistema té com a objectiu adaptar un model GPT amb fine-tuning per a la 
 ```console
   git clone git@github.com:irenebertolin25/OpenAI.git
   cd OpenAI
-  pip install -r requirements.txt
 ```
 2. Instal·lar les dependències
 ```console

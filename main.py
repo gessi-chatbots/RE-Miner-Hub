@@ -1,11 +1,13 @@
 from openai import OpenAI
 import os
 import json
+import jsonlines
 import time
 import csv
 from dotenv import load_dotenv
 from collections import defaultdict
 from pydantic import BaseModel
+from io import StringIO
 
 load_dotenv()
 
@@ -75,6 +77,24 @@ def valid_data_jsonl(data_path, isTrainingData):
     print("\033[92m\u2714 " + "No errors found")
     return True
 
+def add_prompt_to_jsonl_file(input_file, output_file, prompt):
+    print("\033[0m" + "Starting add_prompt_to_jsonl_file...")
+    try:
+        with jsonlines.open(input_file, 'r') as reader, jsonlines.open(output_file, 'w') as writer:
+            for line in reader:
+                messages = line.get('messages', [])
+                if messages:
+                    messages.insert(0, {'role': 'system', 'content': prompt})
+                line['messages'] = messages
+                writer.write(line)
+    
+    except Exception as e:
+        print("\033[91m\u2718 " + f"An error occurred: {e}")
+        return None
+
+    print("\033[92m\u2714 " + f"Jsonl dataset with prompt saved in {output_file}")
+    return output_file
+
 def upload_file(file_path):
     print("\033[0m" + "Starting upload_file...")
     try:
@@ -92,6 +112,7 @@ def upload_file(file_path):
         print("\033[91m\u2718 " + f"An error occurred: {e}")
         return None
 
+    print("\033[92m\u2714 " + "File uploaded")
     return file_uploaded
 
 def create_json_file(path, file_name, content):
@@ -113,6 +134,7 @@ def create_json_file(path, file_name, content):
         return None
 
     print("\033[92m\u2714 " + f"Results saved in {path}{file_name}")
+    return result_file
 
 def create_csv_file(path, file_name, content):
     print("\033[0m" + "Starting create_csv_file...")
@@ -137,6 +159,32 @@ def create_csv_file(path, file_name, content):
         return None
 
     print("\033[92m\u2714 " + f"Results saved in {path}{file_name}")
+    return result_file
+
+def create_csv_file_from_array(path, file_name, content):
+    print("\033[0m" + "Starting create_csv_file_from_array...")
+    try:
+        directory = os.path.join(path, os.path.dirname(file_name))
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        existing_files = [item_file for item_file in os.listdir(path) if item_file.startswith(file_name) and item_file.endswith('.csv')]
+        next_number = 0 if not existing_files else len(existing_files) + 1
+        file_name = f'{file_name}{next_number}.csv'
+
+        fieldnames = ['User review', 'Emotion for chat completion with temperature 0.2', 'Emotion for chat completion with temperature 0.8']
+
+        with open(os.path.join(path, file_name), 'w', newline='') as result_file:
+            writer = csv.writer(result_file)
+            writer.writerow(fieldnames)
+            writer.writerows(content)
+    
+    except Exception as e:
+        print("\033[91m\u2718 " + f"An error occurred: {e}")
+        return None
+
+    print("\033[92m\u2714 " + f"Results saved in {path}{file_name}")
+    return result_file
 
 def create_fine_tuning_job(file_uploaded, model):
     print("\033[0m" + "Starting create_fine_tuning_job...")
@@ -160,6 +208,7 @@ def create_fine_tuning_job(file_uploaded, model):
 
     fine_tuning_job_serializable = fine_tuning_job.model_dump()
     create_json_file("results/", "fine_tuning_job_result_", fine_tuning_job_serializable)
+
     if create_json_file is None:
             print("\033[91m\u2718 " + "Error in create_json_file")
             return None
@@ -167,7 +216,7 @@ def create_fine_tuning_job(file_uploaded, model):
     return fine_tuning_job
 
 def chat_completion(model, messages, temperature):
-    print("Starting chat_completion...")
+    print("\033[0m" + "Starting chat_completion...")
     try:
         completion = client.chat.completions.create(
             model=model,
@@ -179,7 +228,7 @@ def chat_completion(model, messages, temperature):
         print("\033[91m\u2718 " + f"An error occurred: {e}")
         return None
 
-    print(f'Completion with temperature {temperature}: ', completion.choices[0].message.content)
+    print("\033[92m\u2714 " + f'Completion with temperature {temperature}: ', completion.choices[0].message.content)
     return completion
 
 def convert_to_serializable(item):
@@ -202,7 +251,7 @@ def generate_chat_completion_results(model, dataset_path):
                 data = json.loads(line)
                 data_message = data.get("messages")
                 user_review = data_message[1].get("content")
-                print('User review: ', user_review)
+                print("\033[0m" + 'User review: ', user_review)
 
                 completion_low_temperature = chat_completion(model, data_message, 0.2)
                 if chat_completion is None:
@@ -213,7 +262,7 @@ def generate_chat_completion_results(model, dataset_path):
                     print("\033[91m\u2718 " + "Error in chat completion with temperature 0.8")
                     return None
 
-                result = ['User review: ' + user_review, 'Chat completion with temperature 0.2: ' + completion_low_temperature.choices[0].message.content, 'Chat completion with temperature 0.8: ' + completion_high_temperature.choices[0].message.content]
+                result = [user_review, completion_low_temperature.choices[0].message.content, completion_high_temperature.choices[0].message.content]
                 generated_completion.append(result)
         
         generated_completion = [convert_to_serializable(item) for item in generated_completion]
@@ -221,14 +270,101 @@ def generate_chat_completion_results(model, dataset_path):
             print("\033[91m\u2718 " + "Error in convert_to_serializable")
             return None
         
-        create_json_file("results/", "chat_completion_result_", generated_completion)
+        # NOTE: You can change this to create a json file instead of a csv file
+        """create_json_file("results/", "chat_completion_result_", generated_completion)
         if create_json_file is None:
             print("\033[91m\u2718 " + "Error in create_json_file")
             return None
+        """
+
+        chat_completion_result = create_csv_file_from_array("results/", "chat_completion_result_", generated_completion)
+        if chat_completion_result is None:
+            print("\033[91m\u2718 " + "Error in create_csv_file")
+            return None
+        
+        return chat_completion_result
 
     except Exception as e:
         print("\033[91m\u2718 " + f"An error occurred: {e}")
         return None
+
+def refactor_id_jsonl(jsonl_file):
+    print("\033[0m" + "Starting refactor_id_jsonl...")
+    try:
+        id_count = {}
+        updated_lines = []
+
+        with open(jsonl_file, 'r') as reader:
+            lines = reader.readlines()
+
+        for line in lines:
+            data = json.loads(line)
+            current_id = data.get('id')
+
+            if current_id in id_count:
+                id_count[current_id] += 1
+                data['id'] = f"{current_id}_{id_count[current_id]}"
+            else:
+                id_count[current_id] = 0
+
+            updated_lines.append(json.dumps(data))
+
+        with open(jsonl_file, 'w') as writer:
+            for updated_line in updated_lines:
+                writer.write(f"{updated_line}\n")
+
+    except Exception as e:
+        print("\033[91m\u2718 " + f"An error occurred: {e}")
+        return None
+
+    print("\033[92m\u2714 " + f'IDs processed in {jsonl_file}')
+
+def add_emotion_and_id_to_csv(jsonl_file, csv_file):
+    print("\033[0m" + "Starting add_emotion_and_id_to_csv...")
+    try:
+        emotions = {}
+        ids = []
+
+        # Abre el archivo CSV como objeto
+        with open(csv_file.name, 'r+', newline='', encoding='utf-8') as file:
+            csv_data = StringIO(file.read())  # Crear un StringIO con el contenido del archivo CSV
+            csv_data.seek(0)  # Asegurarse de que el puntero esté al inicio
+
+            csv_reader = csv.reader(csv_data)
+            csv_list = list(csv_reader)
+
+            header = csv_list[0]
+            header.insert(0, 'ID')
+            header.append('Emotion label')
+
+            csv_data.seek(0)  # Mover el puntero al inicio del StringIO
+
+            with jsonlines.open(jsonl_file, 'r') as reader:
+                for line in reader:
+                    ids.append(line["id"])
+                    emotions[line["id"]] = line["emotion"]
+
+            for i, row in enumerate(csv_list[1:], start=1):
+                row.insert(0, ids[i - 1])
+                emotion = emotions.get(ids[i - 1], '')
+                row.append(emotion)
+
+            csv_data.seek(0)  # Mover el puntero al inicio del StringIO
+
+            writer = csv.writer(csv_data)
+            writer.writerows(csv_list)
+
+            # Actualizar el contenido del archivo CSV
+            file.seek(0)
+            file.write(csv_data.getvalue())
+            file.truncate()  # Truncar el archivo si es necesario
+
+    except Exception as e:
+        print("\033[91m\u2718 " + f"An error occurred: {e}")
+        return None
+
+    print("\033[92m\u2714 " + "IDs and emotions added")
+    return csv_file
 
 def main():
     print("Starting main...")
@@ -240,8 +376,14 @@ def main():
     if not valid_data_jsonl(training_dataset, True) or not valid_data_jsonl(test_dataset, False):
         return
 
+    # Add prompt to training file
+    system_prompt = "Can you tell me what emotion is expressing the message above? It can be one of the following: happiness, sadness, anger, fear, surprise, disgust or not-relevant (if it doesn't express any relevant emotion)."
+    training_dataset_with_prompt = add_prompt_to_jsonl_file(training_dataset, "data/training_dataset_with_prompt.jsonl", system_prompt)
+    if training_dataset_with_prompt is None:
+        return
+
     # Upload training file
-    file_uploaded = upload_file(training_dataset)
+    file_uploaded = upload_file(training_dataset_with_prompt)
     if file_uploaded is None:
         return
 
@@ -254,17 +396,28 @@ def main():
     # Get the metrics
     result_files_id = fine_tuned_job.result_files[0]
     content = client.files.retrieve_content(result_files_id)
-    create_csv_file("results/", "training_metrics_", content)
-    if create_csv_file is None:
+    csv_file = create_csv_file("results/", "training_metrics_", content)
+    if csv_file is None:
+        return
+
+    # Add prompt to test file
+    test_dataset_with_prompt = add_prompt_to_jsonl_file(test_dataset, "data/test_dataset_with_prompt.jsonl", system_prompt)
+    if test_dataset_with_prompt is None:
         return
 
     # Create chat completion and generate result file
-    # model = "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8DJxRmih"
     model = fine_tuned_job.fine_tuned_model
-    generate_chat_completion_results(model, test_dataset)
-    if generate_chat_completion_results is None:
+    csv_results_file = generate_chat_completion_results(model, test_dataset_with_prompt)
+    if csv_results_file is None:
         return
 
+    # Add ID & emotion to csv file
+    emotion_labels_path = "./data/emotion_labels_test_dataset.jsonl"
+    refactor_id_jsonl(emotion_labels_path)
+    csv_results_file = add_emotion_and_id_to_csv(emotion_labels_path, csv_results_file)
+    if csv_results_file is None:
+        return
+    
     print("\033[92m\u2714 " + "The program has finished successfully")
 
 if __name__ == '__main__':

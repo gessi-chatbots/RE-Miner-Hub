@@ -16,13 +16,8 @@ def create_app():
             data = request.get_json()
             messages = data.get("messages")
 
-            results = []
-            for message in messages:
-                completion = emotion_extraction_handler.emotion_extraction(message['text'])
-                if completion is None:
-                    return "An error occurred"
-                results.append({'text': message, 'emotion': completion.choices[0].message.content})
-            
+            results = emotion_extraction_handler.emotion_extraction(messages)
+
             return jsonify(results)
 
         except Exception as e:

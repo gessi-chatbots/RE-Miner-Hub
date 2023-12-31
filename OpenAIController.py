@@ -4,6 +4,7 @@ from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 
 from src.emotion_extraction_handler import EmotionExtractionHandler
+from src.feature_extraction_handler import FeatureExtractionHandler
 
 app = Flask(__name__)
 CORS(app)
@@ -26,17 +27,48 @@ def create_app():
     )
     app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
-    @app.route('/extract-emotion', methods=['POST'])
-    def get_emotion():
+    @app.route('/analyze-reviews', methods=['POST'])
+    def analyze_reviews():
         try:
-            if 'messages' not in request.json.keys():
+            if 'model' not in request.args.keys():
+                return "Lacking model in proper tag.", 400
+            if 'text' not in request.json.keys():
                 return "Lacking textual data in proper tag.", 400
-
-            emotion_extraction_handler = EmotionExtractionHandler()
+            
+            model = request.args.get("model")
             data = request.get_json()
-            messages = data.get("messages")
+            text = data.get("text")
 
-            results = emotion_extraction_handler.emotion_extraction(messages)
+            other_models = ["ParallelDots", "BERT", "BETO", "SVC"]
+
+            if model == "GPT-3.5":
+                emotion_extraction_handler = EmotionExtractionHandler()
+                emotions = emotion_extraction_handler.emotion_extraction(text)
+            # TODO: Change this to Twitter API
+            elif model in other_models:
+                emotions = []
+                for message in text:
+                    emotions.append({'text': message, 'emotion': model})
+            else:
+                return "Model not found", 404
+
+            feature_extraction_handler = FeatureExtractionHandler()
+            features = feature_extraction_handler.extract_features(text)
+
+            results = {}
+            for review in emotions:
+                id_text = review['text']['id']
+                results[id_text] = {
+                    "emotion": review['emotion'],
+                    "text": review['text']
+                }
+
+            for review in features:
+                id_text = review['id']
+                if id_text in results:
+                    results[id_text]['features'] = review['features']
+
+            results = list(results.values())
 
             return jsonify(results)
 
@@ -47,4 +79,4 @@ def create_app():
 
 if __name__ == "__main__":
     flask_app = create_app()
-    flask_app.run(host='0.0.0.0')
+    flask_app.run(host='0.0.0.0', port=3000)

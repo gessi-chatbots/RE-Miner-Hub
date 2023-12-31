@@ -3,40 +3,51 @@ info:
     title: API emotion extraction
     description: API per l'extracció de emocions a partir d'un text
     version: 1.0.0
-host: localhost:5000
+host: localhost:3000
 schemes:
     - http
 paths:
-    /extract-emotion:
+    /analyze-reviews:
         post:
-            summary: Obtenir l'emoció a partir d'un text
-            description: Retorna un json que conté l'emoció extreta a partir d'un text
+            summary: Analitzar un conjunt de textos
+            description: Retorna un json que conté l'emoció i les features extretes a partir d'un text
             consumes:
                 - application/json
             produces:
                 - application/json
             parameters:
+                - in: query
+                  name: model
+                  description: Model a utilitzar per l'extracció de l'emoció
+                  required: true
+                  type: string
+                  enum:
+                  - GPT-3.5
+                  - ParallelDots
+                  - BERT
+                  - BETO
+                  - SVC
                 - in: body
-                  name: body
+                  name: Missatges
                   description: Llista de texts a analitzar
                   required: true
                   schema:
-                      type: object
-                      properties:
-                          messages:
-                            type: "array"
+                    type: object
+                    properties:
+                        text:
+                            type: array
                             items:
-                                type: "object"
+                                type: object
                                 properties:
                                     id:
-                                        type: "string"
+                                        type: string
                                         example: "1"
                                     text:
-                                        type: "string"
+                                        type: string
                                         example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
                                 required:
-                                    - "id"
-                                    - "text"
+                                    - id
+                                    - text
             responses:
                 200:
                     description: OK
@@ -58,43 +69,59 @@ paths:
                                             type: string
                                             example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
                 400:
-                    description: Bad request
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                example: "Bad request error"
+                    $ref: '#/components/responses/BadRequestError'
                 401:
-                    description: Unauthorized
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                example: "Unauthorized error"
+                    $ref: '#/components/responses/UnauthorizedError'
                 403:
-                    description: Forbidden
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                example: "Forbidden error"
+                    $ref: '#/components/responses/ForbiddenError'
                 404:
-                    description: Not found
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                example: "Not found error"
+                    $ref: '#/components/responses/NotFoundError'
                 500:
-                    description: Internal server error
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                example: "Internal server error"
-                
+                    $ref: '#/components/responses/InternalServerError'
+components:
+    responses:
+        BadRequestError:
+            description: Solicitud invàlida
+            schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Bad request error"
+                $ref: '#/components/responses/BadRequestError'
+        UnauthorizedError:
+            description: Accés no autoritzat
+            schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Unauthorized error"
+                $ref: '#/components/responses/UnauthorizedError'
+        ForbiddenError:
+            description: Accés prohibit
+            schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Forbidden error"
+                $ref: '#/components/responses/ForbiddenError'
+        NotFoundError:
+            description: Recurs no trobat
+            schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Not found error"
+                $ref: '#/components/responses/NotFoundError'
+        InternalServerError:
+            description: Error intern del servidor
+            schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Internal server error"
+                $ref: '#/components/responses/InternalServerError'

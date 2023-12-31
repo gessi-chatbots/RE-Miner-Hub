@@ -13,10 +13,10 @@ class EmotionExtractionHandler:
     def __init__(self):
         self.fine_tuned_model = "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8bOqoLfh"
 
-    def emotion_extraction(self, messages):
+    def emotion_extraction(self, text):
         try:
             results = []
-            for message in messages:
+            for message in text:
                 completion = client.chat.completions.create(
                     model=self.fine_tuned_model,
                     messages=[

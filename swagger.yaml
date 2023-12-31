@@ -1,0 +1,100 @@
+swagger: "2.0"
+info:
+    title: API emotion extraction
+    description: API per l'extracció de emocions a partir d'un text
+    version: 1.0.0
+host: localhost:5000
+schemes:
+    - http
+paths:
+    /extract-emotion:
+        post:
+            summary: Obtenir l'emoció a partir d'un text
+            description: Retorna un json que conté l'emoció extreta a partir d'un text
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            parameters:
+                - in: body
+                  name: body
+                  description: Llista de texts a analitzar
+                  required: true
+                  schema:
+                      type: object
+                      properties:
+                          messages:
+                            type: "array"
+                            items:
+                                type: "object"
+                                properties:
+                                    id:
+                                        type: "string"
+                                        example: "1"
+                                    text:
+                                        type: "string"
+                                        example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
+                                required:
+                                    - "id"
+                                    - "text"
+            responses:
+                200:
+                    description: OK
+                    schema:
+                        type: array
+                        items:
+                            type: object
+                            properties:
+                                emotion:
+                                    type: string
+                                    example: "anger"
+                                text:
+                                    type: object
+                                    properties:
+                                        id:
+                                            type: string
+                                            example: "1"
+                                        text:
+                                            type: string
+                                            example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
+                400:
+                    description: Bad request
+                    schema:
+                        type: object
+                        properties:
+                            error:
+                                type: string
+                                example: "Bad request error"
+                401:
+                    description: Unauthorized
+                    schema:
+                        type: object
+                        properties:
+                            error:
+                                type: string
+                                example: "Unauthorized error"
+                403:
+                    description: Forbidden
+                    schema:
+                        type: object
+                        properties:
+                            error:
+                                type: string
+                                example: "Forbidden error"
+                404:
+                    description: Not found
+                    schema:
+                        type: object
+                        properties:
+                            error:
+                                type: string
+                                example: "Not found error"
+                500:
+                    description: Internal server error
+                    schema:
+                        type: object
+                        properties:
+                            error:
+                                type: string
+                                example: "Internal server error"
+                

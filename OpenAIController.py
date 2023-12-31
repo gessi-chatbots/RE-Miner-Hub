@@ -1,10 +1,30 @@
 import flask
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from src.emotion_extraction_handler import EmotionExtractionHandler
 
+app = Flask(__name__)
+CORS(app)
+
 def create_app():
-    app = Flask(__name__)
+
+    @app.route('/swagger.yaml')
+    def swagger_yaml():
+        return send_file('swagger.yaml')
+
+    # Flask Swagger configs
+    SWAGGER_URL = '/swagger'
+    API_URL = '/swagger.yaml'
+    SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        API_URL,
+        config={
+            'app_name': "API emotion extraction"
+        }
+    )
+    app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 
     @app.route('/extract-emotion', methods=['POST'])
     def get_emotion():

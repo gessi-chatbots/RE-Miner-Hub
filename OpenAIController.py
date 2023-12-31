@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 
 from src.emotion_extraction_handler import EmotionExtractionHandler
-from src.feature_extraction_handler import FeatureExtractionHandler
+from src.APIFeatureExtraction import APIFeatureExtraction
 
 app = Flask(__name__)
 CORS(app)
@@ -52,8 +52,8 @@ def create_app():
             else:
                 return "Model not found", 404
 
-            feature_extraction_handler = FeatureExtractionHandler()
-            features = feature_extraction_handler.extract_features(text)
+            api_feature_extraction = APIFeatureExtraction()
+            features = api_feature_extraction.extract_features(text)
 
             results = {}
             for review in emotions:

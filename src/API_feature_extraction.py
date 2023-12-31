@@ -1,6 +1,6 @@
 import requests
 
-class FeatureExtractionHandler:
+class APIFeatureExtraction:
     def __init__(self):
         self.endpoint = 'http://127.0.0.1:5000/extract-features'
 

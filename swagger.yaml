@@ -10,7 +10,7 @@ paths:
     /analyze-reviews:
         post:
             summary: Analitzar un conjunt de textos
-            description: Retorna un json que conté l'emoció i les features extretes a partir d'un text
+            description: Retorna un json que conté l'emoció o emocions i les features extretes a partir d'un text
             consumes:
                 - application/json
             produces:
@@ -59,6 +59,9 @@ paths:
                                 emotion:
                                     type: string
                                     example: "anger"
+                                features:
+                                    type: array
+                                    example: ["widget not way"]
                                 text:
                                     type: object
                                     properties:

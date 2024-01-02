@@ -4,7 +4,8 @@ from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 
 from src.emotion_extraction_handler import EmotionExtractionHandler
-from src.APIFeatureExtraction import APIFeatureExtraction
+from src.API_feature_extraction import APIFeatureExtraction
+from src.API_sentiment_analysis import APISentimentAnalysis
 
 app = Flask(__name__)
 CORS(app)
@@ -41,27 +42,33 @@ def create_app():
 
             other_models = ["ParallelDots", "BERT", "BETO", "SVC"]
 
+            results = {}
+
             if model == "GPT-3.5":
                 emotion_extraction_handler = EmotionExtractionHandler()
-                emotions = emotion_extraction_handler.emotion_extraction(text)
-            # TODO: Change this to Twitter API
+                reviews_with_emotion = emotion_extraction_handler.emotion_extraction(text)
+                for review in reviews_with_emotion:
+                    id_text = review['text']['id']
+                    results[id_text] = {
+                        "emotion": review['emotion'],
+                        "text": review['text']
+                    }
             elif model in other_models:
-                emotions = []
+                api_sentiment_analysis = APISentimentAnalysis()
                 for message in text:
-                    emotions.append({'text': message, 'emotion': model})
+                    emotions = api_sentiment_analysis.get_emotions(model, message['text'])
+                    if emotions is None:
+                        return "Error in sentiment analysis request", 500
+                    else:
+                        results[message['id']] = {
+                            "emotions": emotions['emotions'],
+                            "text": message
+                        }
             else:
                 return "Model not found", 404
 
             api_feature_extraction = APIFeatureExtraction()
             features = api_feature_extraction.extract_features(text)
-
-            results = {}
-            for review in emotions:
-                id_text = review['text']['id']
-                results[id_text] = {
-                    "emotion": review['emotion'],
-                    "text": review['text']
-                }
 
             for review in features:
                 id_text = review['id']

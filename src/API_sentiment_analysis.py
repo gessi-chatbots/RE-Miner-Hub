@@ -1,9 +1,13 @@
+import os
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class APISentimentAnalysis:
     def __init__(self):
         self.endpoint = 'http://localhost:8080/api/emotion'
-        self.headers = {'Authorization': 'ce3adcbe-1cdb-40f6-b107-8dd45ef246f4', 'Content-Type': 'application/json'}
+        self.headers = {'Authorization': os.getenv(AUTHORITATION_KEY), 'Content-Type': 'application/json'}
 
     def get_emotions(self, model, text):
         try:

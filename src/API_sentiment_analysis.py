@@ -7,7 +7,7 @@ load_dotenv()
 class APISentimentAnalysis:
     def __init__(self):
         self.endpoint = 'http://localhost:8080/api/emotion'
-        self.headers = {'Authorization': os.getenv(AUTHORITATION_KEY), 'Content-Type': 'application/json'}
+        self.headers = {'Authorization': os.getenv("AUTHORITATION_KEY"), 'Content-Type': 'application/json'}
 
     def get_emotions(self, model, text):
         try:

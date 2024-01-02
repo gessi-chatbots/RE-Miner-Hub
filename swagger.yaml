@@ -61,6 +61,8 @@ paths:
                                     example: "anger"
                                 features:
                                     type: array
+                                    items:
+                                      type: string
                                     example: ["widget not way"]
                                 text:
                                     type: object
@@ -72,59 +74,42 @@ paths:
                                             type: string
                                             example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
                 400:
-                    $ref: '#/components/responses/BadRequestError'
+                    description: Bad Request
+                    schema:
+                        type: object
+                        properties:
+                            error:
+                                type: string
+                                example: "Bad request error"
                 401:
-                    $ref: '#/components/responses/UnauthorizedError'
+                    description: Unauthorized
+                    schema:
+                        type: object
+                        properties:
+                            error:
+                                type: string
+                                example: "Unauthorized error"
                 403:
-                    $ref: '#/components/responses/ForbiddenError'
+                    description: Forbidden
+                    schema:
+                        type: object
+                        properties:
+                            error:
+                                type: string
+                                example: "Forbidden error"
                 404:
-                    $ref: '#/components/responses/NotFoundError'
+                    description: Not found
+                    schema:
+                        type: object
+                        properties:
+                            error:
+                                type: string
+                                example: "Not found error"
                 500:
-                    $ref: '#/components/responses/InternalServerError'
-components:
-    responses:
-        BadRequestError:
-            description: Solicitud invàlida
-            schema:
-                type: object
-                properties:
-                    error:
-                        type: string
-                        example: "Bad request error"
-                $ref: '#/components/responses/BadRequestError'
-        UnauthorizedError:
-            description: Accés no autoritzat
-            schema:
-                type: object
-                properties:
-                    error:
-                        type: string
-                        example: "Unauthorized error"
-                $ref: '#/components/responses/UnauthorizedError'
-        ForbiddenError:
-            description: Accés prohibit
-            schema:
-                type: object
-                properties:
-                    error:
-                        type: string
-                        example: "Forbidden error"
-                $ref: '#/components/responses/ForbiddenError'
-        NotFoundError:
-            description: Recurs no trobat
-            schema:
-                type: object
-                properties:
-                    error:
-                        type: string
-                        example: "Not found error"
-                $ref: '#/components/responses/NotFoundError'
-        InternalServerError:
-            description: Error intern del servidor
-            schema:
-                type: object
-                properties:
-                    error:
-                        type: string
-                        example: "Internal server error"
-                $ref: '#/components/responses/InternalServerError'
+                    description: Internal server error
+                    schema:
+                        type: object
+                        properties:
+                            error:
+                                type: string
+                                example: "Internal server error"

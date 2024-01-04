@@ -23,7 +23,6 @@ paths:
                   type: string
                   enum:
                   - GPT-3.5
-                  - ParallelDots
                   - BERT
                   - BETO
                   - SVC

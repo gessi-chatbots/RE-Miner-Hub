@@ -1,114 +1,340 @@
-swagger: "2.0"
+openapi: 3.0.1
 info:
-    title: API emotion extraction
-    description: API per l'extracció de emocions a partir d'un text
-    version: 1.0.0
-host: localhost:3000
-schemes:
-    - http
+  title: App reviews analysis API
+  description: API per l'extracció d'emocions i features a partir d'un text
+  version: 1.0.0
+servers:
+- url: http://localhost:3000/
 paths:
-    /analyze-reviews:
-        post:
-            summary: Analitzar un conjunt de textos
-            description: Retorna un json que conté l'emoció o emocions i les features extretes a partir d'un text
-            consumes:
-                - application/json
-            produces:
-                - application/json
-            parameters:
-                - in: query
-                  name: model
-                  description: Model a utilitzar per l'extracció de l'emoció
-                  required: true
-                  type: string
-                  enum:
-                  - GPT-3.5
-                  - BERT
-                  - BETO
-                  - SVC
-                - in: body
-                  name: Missatges
-                  description: Llista de texts a analitzar
-                  required: true
-                  schema:
+  /extract-emotion:
+    post:
+      summary: Extreure l'emoció d'un conjunt de textos
+      description: Retorna un json que conté l'emoció o emocions extretes a partir
+        d'un text
+      parameters:
+      - name: model
+        in: query
+        description: Model a utilitzar per l'extracció de l'emoció
+        required: true
+        schema:
+          type: string
+          enum:
+          - GPT-3.5
+          - BERT
+          - BETO
+          - SVC
+      requestBody:
+        description: Llista de texts a analitzar
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: array
+                  items:
+                    required:
+                    - id
+                    - text
                     type: object
                     properties:
+                      id:
+                        type: string
+                        example: "1"
+                      text:
+                        type: string
+                        example: "Widget not the way it used to be No more 5-day forecast,\
+                          \ temp, and local temp."
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    emotion:
+                      type: string
+                      example: anger
+                    text:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "1"
                         text:
-                            type: array
-                            items:
-                                type: object
-                                properties:
-                                    id:
-                                        type: string
-                                        example: "1"
-                                    text:
-                                        type: string
-                                        example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
-                                required:
-                                    - id
-                                    - text
-            responses:
-                200:
-                    description: OK
-                    schema:
-                        type: array
-                        items:
-                            type: object
-                            properties:
-                                emotion:
-                                    type: string
-                                    example: "anger"
-                                features:
-                                    type: array
-                                    items:
-                                      type: string
-                                    example: ["widget not way"]
-                                text:
-                                    type: object
-                                    properties:
-                                        id:
-                                            type: string
-                                            example: "1"
-                                        text:
-                                            type: string
-                                            example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
-                400:
-                    description: Bad Request
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                example: "Bad request error"
-                401:
-                    description: Unauthorized
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                example: "Unauthorized error"
-                403:
-                    description: Forbidden
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                example: "Forbidden error"
-                404:
-                    description: Not found
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                example: "Not found error"
-                500:
-                    description: Internal server error
-                    schema:
-                        type: object
-                        properties:
-                            error:
-                                type: string
-                                example: "Internal server error"
+                          type: string
+                          example: "Widget not the way it used to be No more 5-day\
+                            \ forecast, temp, and local temp."
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Bad request error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Unauthorized error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Forbidden error"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Not found error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Internal server error"
+      x-codegen-request-body-name: Missatges
+  /extract-features:
+    post:
+      summary: Extreure les features d'un conjunt de textos
+      description: Retorna un json que conté les features extretes a partir d'un text
+      requestBody:
+        description: Llista de texts a analitzar
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: array
+                  items:
+                    required:
+                    - id
+                    - text
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "1"
+                      text:
+                        type: string
+                        example: "Widget not the way it used to be No more 5-day forecast,\
+                          \ temp, and local temp."
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    text:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "1"
+                        text:
+                          type: string
+                          example: "Widget not the way it used to be No more 5-day\
+                            \ forecast, temp, and local temp."
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Bad request error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Unauthorized error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Forbidden error"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Not found error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Internal server error"
+      x-codegen-request-body-name: Missatges
+  /analyze-reviews:
+    post:
+      summary: Analitzar un conjunt de textos
+      description: Retorna un json que conté l'emoció o emocions i les features extretes
+        a partir d'un text
+      parameters:
+      - name: model
+        in: query
+        description: Model a utilitzar per l'extracció de l'emoció
+        required: true
+        schema:
+          type: string
+          enum:
+          - GPT-3.5
+          - BERT
+          - BETO
+          - SVC
+      requestBody:
+        description: Llista de texts a analitzar
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: array
+                  items:
+                    required:
+                    - id
+                    - text
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "1"
+                      text:
+                        type: string
+                        example: "Widget not the way it used to be No more 5-day forecast,\
+                          \ temp, and local temp."
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    emotion:
+                      type: string
+                      example: anger
+                    features:
+                      type: array
+                      example:
+                      - widget not way
+                      items:
+                        type: string
+                    text:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "1"
+                        text:
+                          type: string
+                          example: "Widget not the way it used to be No more 5-day\
+                            \ forecast, temp, and local temp."
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Bad request error"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Unauthorized error"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Forbidden error"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Not found error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    error:
+                        type: string
+                        example: "Internal server error"
+      x-codegen-request-body-name: Missatges

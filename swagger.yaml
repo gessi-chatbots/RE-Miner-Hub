@@ -12,7 +12,7 @@ paths:
       description: Retorna un json que conté l'emoció o emocions extretes a partir
         d'un text
       parameters:
-      - name: model
+      - name: model_emotion
         in: query
         description: Model a utilitzar per l'extracció de l'emoció
         required: true
@@ -43,8 +43,7 @@ paths:
                         example: "1"
                       text:
                         type: string
-                        example: "Widget not the way it used to be No more 5-day forecast,\
-                          \ temp, and local temp."
+                        example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
         required: true
       responses:
         "200":
@@ -67,8 +66,7 @@ paths:
                           example: "1"
                         text:
                           type: string
-                          example: "Widget not the way it used to be No more 5-day\
-                            \ forecast, temp, and local temp."
+                          example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
         "400":
           description: Bad Request
           content:
@@ -124,6 +122,21 @@ paths:
     post:
       summary: Extreure les features d'un conjunt de textos
       description: Retorna un json que conté les features extretes a partir d'un text
+      parameters:
+      - name: model_features
+        in: query
+        description: Model a utilitzar per l'extracció de features
+        required: true
+        schema:
+          type: string
+          enum:
+          - transfeatex
+          - t-frex-bert-base-uncased
+          - t-frex-bert-large-uncased
+          - t-frex-roberta-base
+          - t-frex-roberta-large
+          - t-frex-xlnet-base-cased
+          - t-frex-xlnet-large-cased
       requestBody:
         description: Llista de texts a analitzar
         content:
@@ -144,8 +157,7 @@ paths:
                         example: "1"
                       text:
                         type: string
-                        example: "Widget not the way it used to be No more 5-day forecast,\
-                          \ temp, and local temp."
+                        example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
         required: true
       responses:
         "200":
@@ -160,13 +172,17 @@ paths:
                     text:
                       type: object
                       properties:
+                        features:
+                          type: array
+                          example: widget not way
+                          items:
+                            type: string
                         id:
                           type: string
                           example: "1"
                         text:
                           type: string
-                          example: "Widget not the way it used to be No more 5-day\
-                            \ forecast, temp, and local temp."
+                          example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
         "400":
           description: Bad Request
           content:
@@ -224,7 +240,7 @@ paths:
       description: Retorna un json que conté l'emoció o emocions i les features extretes
         a partir d'un text
       parameters:
-      - name: model
+      - name: model_emotion
         in: query
         description: Model a utilitzar per l'extracció de l'emoció
         required: true
@@ -235,6 +251,20 @@ paths:
           - BERT
           - BETO
           - SVC
+      - name: model_features
+        in: query
+        description: Model a utilitzar per l'extracció de features
+        required: true
+        schema:
+          type: string
+          enum:
+          - transfeatex
+          - t-frex-bert-base-uncased
+          - t-frex-bert-large-uncased
+          - t-frex-roberta-base
+          - t-frex-roberta-large
+          - t-frex-xlnet-base-cased
+          - t-frex-xlnet-large-cased
       requestBody:
         description: Llista de texts a analitzar
         content:
@@ -250,13 +280,17 @@ paths:
                     - text
                     type: object
                     properties:
+                      features:
+                        type: array
+                        example: widget not way
+                        items:
+                          type: string
                       id:
                         type: string
                         example: "1"
                       text:
                         type: string
-                        example: "Widget not the way it used to be No more 5-day forecast,\
-                          \ temp, and local temp."
+                        example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
         required: true
       responses:
         "200":
@@ -285,8 +319,7 @@ paths:
                           example: "1"
                         text:
                           type: string
-                          example: "Widget not the way it used to be No more 5-day\
-                            \ forecast, temp, and local temp."
+                          example: "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
         "400":
           description: Bad Request
           content:

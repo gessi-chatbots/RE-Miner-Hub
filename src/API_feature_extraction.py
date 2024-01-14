@@ -12,7 +12,6 @@ class APIFeatureExtraction:
                 return nlp_response.json()
             else:
                 raise Exception("Error in NLP request")
-                #return "Error in NLP request", 500
 
         except Exception as e:
             print(f"An error occurred: {e}")

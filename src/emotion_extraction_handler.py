@@ -11,7 +11,7 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class EmotionExtractionHandler:
     def __init__(self):
-        self.fine_tuned_model = "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8bOqoLfh"
+        self.fine_tuned_model = "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8gzGA5Sq"
 
     def emotion_extraction(self, text):
         try:

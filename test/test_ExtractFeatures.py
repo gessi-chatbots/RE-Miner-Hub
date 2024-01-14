@@ -11,6 +11,14 @@ class TestExtractFeatures(unittest.TestCase):
                 {
                     "id": "1",
                     "text": "Widget not the way it used to be No more 5-day forecast, temp, and local temp."
+                },
+                {
+                    "id": "2",
+                    "text": "I originally downloaded the app for pomodoro timing, but I stayed for the project management features, with syncing."
+                },
+                {
+                    "id": "3",
+                    "text": "I'm my phone the notifications of group message are not at a time please check what was the reason behind it because due to this default I loose some opportunity"
                 }
             ]
         }
@@ -24,7 +32,7 @@ class TestExtractFeatures(unittest.TestCase):
 
         response_data = json.loads(response.data)
         self.assertIsInstance(response_data, list)
-        self.assertEqual(len(response_data), 1)
+        self.assertEqual(len(response_data), 3)
 
     def test_extract_features_with_t_frex_bert_base_uncased_success(self):
         response = self.app.post('/extract-features?model_features=t-frex-bert-base-uncased', json=self.data)
@@ -35,7 +43,7 @@ class TestExtractFeatures(unittest.TestCase):
 
         response_data = json.loads(response.data)
         self.assertIsInstance(response_data, list)
-        self.assertEqual(len(response_data), 1)
+        self.assertEqual(len(response_data), 3)
 
     def test_extract_features_invalid_data(self):
         response = self.app.post('/extract-features')

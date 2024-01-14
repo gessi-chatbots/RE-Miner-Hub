@@ -2,9 +2,9 @@ import json
 from collections import defaultdict
 
 class DatasetHandler:
-    def __init__(self, emotion_analysis):
-        self.training_dataset = emotion_analysis.training_dataset
-        self.test_dataset = emotion_analysis.test_dataset
+    def __init__(self, GenerativeSentimentAnalysisController):
+        self.training_dataset = GenerativeSentimentAnalysisController.training_dataset
+        self.test_dataset = GenerativeSentimentAnalysisController.test_dataset
 
     def validate_datasets(self):
         return self.valid_data_jsonl(self.training_dataset, True) and self.valid_data_jsonl(self.test_dataset, False)

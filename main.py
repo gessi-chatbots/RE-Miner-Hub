@@ -9,11 +9,11 @@ from collections import defaultdict
 from pydantic import BaseModel
 from io import StringIO
 
-from src.emotion_analysis import EmotionAnalysis
+from src.GenerativeSentimentAnalysisController import GenerativeSentimentAnalysisController
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 if __name__ == '__main__':
-    emotion_analysis = EmotionAnalysis()
-    emotion_analysis.start_emotion_analysis()
+    GenerativeSentimentAnalysisController = GenerativeSentimentAnalysisController()
+    GenerativeSentimentAnalysisController.start_generative_sentiment_analysis()

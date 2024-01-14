@@ -8,8 +8,8 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class FineTuningJobHandler:
-    def __init__(self, emotion_analysis):
-        self.model = emotion_analysis.model
+    def __init__(self, GenerativeSentimentAnalysisController):
+        self.model = GenerativeSentimentAnalysisController.model
         self.path = "results/"
         self.file_name = "fine_tuning_job_result_"
 
@@ -21,7 +21,7 @@ class FineTuningJobHandler:
                 os.makedirs(directory)
 
             existing_files = [item_file for item_file in os.listdir(self.path) if item_file.startswith(self.file_name) and item_file.endswith('.json')]
-            next_number = 0 if not existing_files else len(existing_files) + 1
+            next_number = 1 if not existing_files else len(existing_files) + 1
             self.file_name = f'{self.file_name}{next_number}.json'
 
             with open(os.path.join(self.path, self.file_name), 'w') as result_file:

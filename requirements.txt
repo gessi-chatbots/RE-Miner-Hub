@@ -23,6 +23,8 @@ charset-normalizer==2.0.7
 click==8.0.3
 comm==0.1.3
 confection==0.1.0
+coverage==7.4.0
+cryptography==41.0.7
 cycler==0.11.0
 cymem==2.0.7
 datasets==2.14.4
@@ -42,7 +44,9 @@ executing==1.2.0
 fastjsonschema==2.17.1
 filelock==3.12.2
 Flask==2.0.2
+Flask-Cors==4.0.0
 Flask-RESTful==0.3.9
+flask-swagger-ui==4.11.1
 fonttools==4.41.1
 fqdn==1.5.1
 frozenlist==1.4.0
@@ -106,6 +110,7 @@ pandas-stubs==1.2.0.35
 pandocfilters==1.5.0
 parso==0.8.3
 pathy==0.10.2
+patsy==0.5.4
 pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==10.0.0
@@ -122,14 +127,15 @@ pyaml==23.7.0
 pyarrow==13.0.0
 pycodestyle==2.8.0
 pycparser==2.21
-pydantic==2.5.1
+pydantic
 pydantic_core==2.14.3
 pyenchant==3.2.0
 Pygments==2.15.1
 pyparsing==3.1.0
-pytest==7.2.2
+pytest==7.4.4
 python-dateutil==2.8.2
 python-dotenv==0.19.2
+python-gnupg==0.5.1
 python-json-logger==2.0.7
 pytz==2021.3
 PyYAML==6.0
@@ -164,6 +170,7 @@ spacytextblob==4.0.0
 srsly==2.4.6
 stack-data==0.6.2
 stanza==1.2
+statsmodels==0.14.0
 sympy==1.12
 terminado==0.17.1
 textblob==0.15.3

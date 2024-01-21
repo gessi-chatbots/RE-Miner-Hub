@@ -5,6 +5,7 @@ info:
   version: 1.0.0
 servers:
 - url: http://localhost:3000/
+- url: http://gessi-sw.essi.upc.edu:3000/
 paths:
   /extract-emotion:
     post:
@@ -22,7 +23,6 @@ paths:
           - GPT-3.5
           - BERT
           - BETO
-          - SVC
       requestBody:
         description: Llista de texts a analitzar
         content:
@@ -174,7 +174,8 @@ paths:
                       properties:
                         features:
                           type: array
-                          example: widget not way
+                          example:
+                            - widget not way
                           items:
                             type: string
                         id:
@@ -250,7 +251,6 @@ paths:
           - GPT-3.5
           - BERT
           - BETO
-          - SVC
       - name: model_features
         in: query
         description: Model a utilitzar per l'extracció de features
@@ -280,11 +280,6 @@ paths:
                     - text
                     type: object
                     properties:
-                      features:
-                        type: array
-                        example: widget not way
-                        items:
-                          type: string
                       id:
                         type: string
                         example: "1"
@@ -308,7 +303,7 @@ paths:
                     features:
                       type: array
                       example:
-                      - widget not way
+                        - widget not way
                       items:
                         type: string
                     text:

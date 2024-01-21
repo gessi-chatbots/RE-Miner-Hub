@@ -127,7 +127,7 @@ pyaml==23.7.0
 pyarrow==13.0.0
 pycodestyle==2.8.0
 pycparser==2.21
-pydantic
+pydantic==1.10.13
 pydantic_core==2.14.3
 pyenchant==3.2.0
 Pygments==2.15.1

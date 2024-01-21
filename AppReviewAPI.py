@@ -125,7 +125,7 @@ def extract_emotion():
         return jsonify(results)
 
     except Exception as e:
-        return f"An error occurred: {e}"
+        return f"An error occurred: {e}", 400
 
 @app.route('/extract-features', methods=['POST'])
 def extract_features():

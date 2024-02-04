@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-class APISentimentAnalysis:
+class SentimentAnalysisService:
     def __init__(self):
         self.endpoint = 'http://localhost:8080/api/emotion'
         self.headers = {'Authorization': os.getenv("AUTHORITATION_KEY"), 'Content-Type': 'application/json'}

@@ -10,14 +10,14 @@ from io import StringIO
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-class FileHandler:
-    def __init__(self, GenerativeSentimentAnalysisController):
+class FileService:
+    def __init__(self, GenerativeSentimentAnalysisService):
         self.system_prompt = "Can you tell me what emotion is expressing the message above? It can be one of the following: happiness, sadness, anger, fear, surprise, disgust or not-relevant (if it doesn't express any relevant emotion)."
-        self.training_dataset_with_prompt = GenerativeSentimentAnalysisController.training_dataset_with_prompt
-        self.results_path = GenerativeSentimentAnalysisController.results_path
-        self.training_metrics_file = GenerativeSentimentAnalysisController.training_metrics_file
+        self.training_dataset_with_prompt = GenerativeSentimentAnalysisService.training_dataset_with_prompt
+        self.results_path = GenerativeSentimentAnalysisService.results_path
+        self.training_metrics_file = GenerativeSentimentAnalysisService.training_metrics_file
         self.chat_completion_result_file = "chat_completion_result_"
-        self.emotion_labels_path = GenerativeSentimentAnalysisController.emotion_labels_path
+        self.emotion_labels_path = GenerativeSentimentAnalysisService.emotion_labels_path
         
     def add_prompt_to_jsonl_file(self, input_file_path, output_file_path):
         print("\033[0m" + "Starting add_prompt_to_jsonl_file...")

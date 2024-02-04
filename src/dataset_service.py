@@ -1,7 +1,7 @@
 import json
 from collections import defaultdict
 
-class DatasetHandler:
+class DatasetService:
     def __init__(self, GenerativeSentimentAnalysisController):
         self.training_dataset = GenerativeSentimentAnalysisController.training_dataset
         self.test_dataset = GenerativeSentimentAnalysisController.test_dataset

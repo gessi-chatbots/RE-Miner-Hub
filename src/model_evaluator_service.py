@@ -1,12 +1,11 @@
 import csv
 import os
-import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from io import StringIO
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
 
-class ModelEvaluatorHandler:
+class ModelEvaluatorService:
     def __init__(self, GenerativeSentimentAnalysisController, csv_file):
         self.csv_file = csv_file
         self.results_path = GenerativeSentimentAnalysisController.results_path

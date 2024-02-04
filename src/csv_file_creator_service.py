@@ -1,7 +1,7 @@
 import os
 import csv
 
-class CSVFileCreatorHandler:
+class CSVFileCreatorService:
     def __init__(self, GenerativeSentimentAnalysisController):
         self.results_path = GenerativeSentimentAnalysisController.results_path
         self.training_metrics_file = GenerativeSentimentAnalysisController.training_metrics_file

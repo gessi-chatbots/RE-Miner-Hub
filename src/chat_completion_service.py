@@ -6,7 +6,7 @@ from openai import OpenAI
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-class ChatCompletionHandler:
+class ChatCompletionService:
     def __init__(self, GenerativeSentimentAnalysisController):
         self.test_dataset_with_prompt = GenerativeSentimentAnalysisController.test_dataset_with_prompt
         self.low_temperature = 0.2

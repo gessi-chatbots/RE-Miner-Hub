@@ -2,19 +2,18 @@ import os
 
 from dotenv import load_dotenv
 from openai import OpenAI
-from pydantic import BaseModel
 
-from .dataset_handler import DatasetHandler
-from .file_handler import FileHandler
-from .fine_tuning_job_handler import FineTuningJobHandler
-from .csv_file_creator_handler import CSVFileCreatorHandler
-from .chat_completion_handler import ChatCompletionHandler
-from .model_evaluator_handler import ModelEvaluatorHandler
+from .dataset_service import DatasetService
+from .file_service import FileService
+from .fine_tuning_job_service import FineTuningJobHandler
+from .csv_file_creator_service import CSVFileCreatorService
+from .chat_completion_service import ChatCompletionService
+from .model_evaluator_service import ModelEvaluatorService
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-class GenerativeSentimentAnalysisController:
+class GenerativeSentimentAnalysisService:
     def __init__(self):
         self.training_dataset = "./data/training_dataset.jsonl"
         self.test_dataset = "./data/test_dataset.jsonl"
@@ -31,12 +30,12 @@ class GenerativeSentimentAnalysisController:
     def start_generative_sentiment_analysis(self):
         print("Starting generative sentiment analysis...")
 
-        dataset_handler = DatasetHandler(self)
+        dataset_handler = DatasetService(self)
         # Validate datasets
         if not dataset_handler.validate_datasets():
             return
 
-        file_handler = FileHandler(self)
+        file_handler = FileService(self)
         # Add prompt to training dataset
         self.training_dataset_with_prompt = file_handler.add_prompt_to_jsonl_file(self.training_dataset, self.training_dataset_with_prompt)
         if self.training_dataset_with_prompt is None:
@@ -64,7 +63,7 @@ class GenerativeSentimentAnalysisController:
         # Get the fine-tuning job metrics
         result_files_id = fine_tuned_job.result_files[0]
         content = client.files.retrieve_content(result_files_id)
-        csv_file_creator_handler = CSVFileCreatorHandler(self)
+        csv_file_creator_handler = CSVFileCreatorService(self)
         fine_tuning_job_metrics_file = csv_file_creator_handler.create_csv_file_processing_content(content, self.training_metrics_file)
         if fine_tuning_job_metrics_file is None:
             return
@@ -80,7 +79,7 @@ class GenerativeSentimentAnalysisController:
         
         # Create chat completion
         fine_tuned_model = fine_tuned_job.fine_tuned_model
-        chat_completion_handler = ChatCompletionHandler(self)
+        chat_completion_handler = ChatCompletionService(self)
         generated_chat_completion = chat_completion_handler.generate_chat_completion(fine_tuned_model, self.test_dataset_with_prompt)
         if generated_chat_completion is None:
             return
@@ -98,7 +97,7 @@ class GenerativeSentimentAnalysisController:
             return
 
         # Evaluate the results
-        model_evaluator_handler = ModelEvaluatorHandler(self, chat_completion_result_file)
+        model_evaluator_handler = ModelEvaluatorService(self, chat_completion_result_file)
         model_evaluation_results_low_temperature = model_evaluator_handler.evaluate_model('Emotion label', 'Emotion for chat completion with temperature 0.2', 'low_temperature')
         model_evaluation_results_high_temperature = model_evaluator_handler.evaluate_model('Emotion label', 'Emotion for chat completion with temperature 0.8', 'high_temperature')
         if (model_evaluation_results_low_temperature or model_evaluation_results_high_temperature) is None:

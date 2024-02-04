@@ -1,15 +1,11 @@
 import os
-import json
-import jsonlines
-import csv
 from dotenv import load_dotenv
 from openai import OpenAI
-from io import StringIO
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-class EmotionExtractionHandler:
+class EmotionExtractionService:
     def __init__(self):
         self.fine_tuned_model = "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8gzGA5Sq"
 

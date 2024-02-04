@@ -26,7 +26,7 @@ RE-Miner-Hub is a powerful web-service system created to empower researchers by 
 
 1. Run the main script to start the RE-Miner-Hub server
 ```console
-  python AppReviewAPI.py
+  python api.py
 ```
 This will start the web service, and you'll see output indicating that the server is running.
 

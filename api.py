@@ -1,5 +1,3 @@
-import flask
-import json
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -40,7 +38,8 @@ def format_features(text, ner_results):
             if len(current_feature) > 0:
                 features.append(current_feature.strip().lower())
                 current_feature = ""
-            current_feature += f + " "
+            # current_feature += f + " "
+            current_feature += f
 
         elif feature['entity'] == 'I-feature':
             # hot fix to make sure a feature does not have the same word twice
@@ -55,7 +54,7 @@ def format_features(text, ner_results):
 
     if len(current_feature) > 0:
         features.append(current_feature.strip().lower())
-
+    print(features)
     return features
 
 
@@ -185,38 +184,52 @@ def extract_features():
 @app.route('/analyze-reviews', methods=['POST'])
 def analyze_reviews():
     try:
-        if not request.args or (
-                'model_emotion' or 'model_features' not in request.args.keys()) and 'text' not in request.json.keys():
+        if not request.args \
+                or ('model_emotion' not in request.args.keys() or 'model_features' not in request.args.keys()) \
+                and 'text' not in request.json.keys():
             return "Lacking model and textual data in proper tag.", 400
-        if ('model_emotion' or 'model_features') not in request.args.keys():
+        if 'model_emotion' not in request.args.keys() and 'model_features' not in request.args.keys():
             return "Lacking model in proper tag.", 400
         if 'text' not in request.json.keys():
             return "Lacking textual data in proper tag.", 400
 
-        model_emotion = request.args.get("model_emotion")
-        model_features = request.args.get("model_features")
+        model_emotion = None
+        model_features = None
+        if request.args.get('model_emotion') is not None:
+            model_emotion = request.args.get("model_emotion", None)
+        if request.args.get('model_features') is not None:
+            model_features = request.args.get("model_features", None)
         data = request.get_json()
-        text = data.get("text")
-
+        texts = data.get("text")
+        print(texts)
         other_models_emotion = ["BERT", "BETO"]
         other_models_features = ["t-frex-bert-base-uncased", "t-frex-bert-large-uncased", "t-frex-roberta-base",
                                  "t-frex-roberta-large", "t-frex-xlnet-base-cased", "t-frex-xlnet-large-cased"]
-
-        features_with_id = []
         results = {}
+        for text in texts:
+            id_text = text['id']
+            results[id_text] = {
+                "text": {
+                    'text': text['text'],
+                    "emotions": [],
+                    "features": []
+                }
+            }
+        features_with_id = []
 
-        if model_emotion == "GPT-3.5":
+
+        if model_emotion != '' and model_emotion == "GPT-3.5":
             emotion_extraction_handler = EmotionExtractionService()
-            reviews_with_emotion = emotion_extraction_handler.emotion_extraction(text)
+            reviews_with_emotion = emotion_extraction_handler.emotion_extraction(texts)
             for review in reviews_with_emotion:
                 id_text = review['text']['id']
                 results[id_text] = {
                     "text": review['text']
                 }
                 results[id_text]['text']['emotion'] = review['emotion']
-        elif model_emotion in other_models_emotion:
+        elif model_emotion != '' and model_emotion in other_models_emotion:
             api_sentiment_analysis = SentimentAnalysisService()
-            for message in text:
+            for message in texts:
                 emotions = api_sentiment_analysis.get_emotions(model_emotion, message['text'])
                 if emotions is None:
                     return "Error in sentiment analysis request", 500
@@ -227,25 +240,37 @@ def analyze_reviews():
                 max_emotion = max(emotions['emotions'], key=emotions['emotions'].get)
                 results[message['id']]['text']['emotion'] = max_emotion
                 results[message['id']]['text']['emotions'] = emotions['emotions']
-        else:
+        elif model_emotion != '' and model_emotion not in other_models_emotion:
             return "Model not found", 404
 
-        if model_features == "transfeatex":
+        if model_features != '' and model_features == "transfeatex":
             api_feature_extraction = FeatureExtractionService()
-            features_with_id = api_feature_extraction.extract_features(text)
-        elif model_features in other_models_features:
-            for message in text:
+            features_with_id = api_feature_extraction.extract_features(texts)
+        elif model_features != '' and model_features in other_models_features:
+            for message in texts:
+                print(f"model {model_features} and text {message['text']}")
                 classifier = pipeline("ner", model="quim-motger/" + model_features)
                 ner_results = classifier(message['text'])
                 features = format_features(message['text'], ner_results)
                 features_with_id.append({'id': message['id'], 'features': features})
-        else:
+        elif model_features != '' and model_features not in other_models_features:
             return "Model not found", 404
 
         for review in features_with_id:
             id_text = review['id']
             if id_text in results:
-                results[id_text]['text']['features'] = review['features']
+                features_to_append = review.get('features', [])
+                if isinstance(features_to_append, list):
+                    if 'text' in results[id_text]:
+                        for feature_to_append in features_to_append:
+                            results[id_text]['text']['features'].append(feature_to_append)
+                    else:
+                        print(f"Invalid structure for id_text {id_text}. 'text' or 'features' key missing.")
+                else:
+                    print(
+                        f"Invalid 'features' type for id_text {id_text}. Expected list, got {type(features_to_append)}.")
+            else:
+                print(f"Id_text {id_text} not found in results.")
 
         results = list(results.values())
 

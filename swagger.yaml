@@ -244,7 +244,7 @@ paths:
       - name: model_emotion
         in: query
         description: Model a utilitzar per l'extracció de l'emoció
-        required: true
+        required: false
         schema:
           type: string
           enum:
@@ -254,7 +254,7 @@ paths:
       - name: model_features
         in: query
         description: Model a utilitzar per l'extracció de features
-        required: true
+        required: false
         schema:
           type: string
           enum:

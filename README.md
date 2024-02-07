@@ -1,6 +1,13 @@
 # RE-Miner-Hub
 
-RE-Miner-Hub is a powerful web-service system created to empower researchers by providing a unified platform for conducting feature extraction and emotion classification tasks. This system is designed with a common API syntax, making it easy for users to seamlessly integrate these functionalities into their research projects.
+RE-Miner-Hub is a web-service system designed to empower researchers with the capability to conduct feature extraction and emotion classification tasks using a common API syntax. RE-Miner-Hub serves as a centralized orchestration service of heterogeneous software components (both from a logic and physical point of view), each of them deployed as decoupled, decentralized software resources. This architecture facilitates re-usability of third-party methods, which can extend RE-Miner set of tasks by either replicating and embedding these techniques as a new RE-Miner software module or simply by using available services from the web.
+
+### Services Provided
+RE-Miner-Hub offers two main services, which are materialized as differentiated services in the codebase:
+
+1. Emotion Extraction Service: This service specializes in extracting emotional content from text data. Researchers can utilize this service to analyze and classify emotions expressed within textual content.
+
+2. Feature Extraction Service: The feature extraction service focuses on extracting relevant features from input data. These features can be used for various tasks such as sentiment analysis, text categorization, or any other text-based analysis requiring feature representation.
 
 ## Requeriments
 

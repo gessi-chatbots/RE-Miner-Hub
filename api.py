@@ -185,7 +185,7 @@ def extract_features():
 def analyze_reviews():
     try:
         if not request.args \
-                or ('model_emotion' not in request.args.keys() or 'model_features' not in request.args.keys()) \
+                or ('model_emotion' not in request.args.keys() and 'model_features' not in request.args.keys()) \
                 and 'text' not in request.json.keys():
             return "Lacking model and textual data in proper tag.", 400
         if 'model_emotion' not in request.args.keys() and 'model_features' not in request.args.keys():
@@ -193,12 +193,8 @@ def analyze_reviews():
         if 'text' not in request.json.keys():
             return "Lacking textual data in proper tag.", 400
 
-        model_emotion = None
-        model_features = None
-        if request.args.get('model_emotion') is not None:
-            model_emotion = request.args.get("model_emotion", None)
-        if request.args.get('model_features') is not None:
-            model_features = request.args.get("model_features", None)
+        model_emotion = request.args.get("model_emotion", None)
+        model_features = request.args.get("model_features", None)
         data = request.get_json()
         texts = data.get("text")
         print(texts)
@@ -223,10 +219,8 @@ def analyze_reviews():
             reviews_with_emotion = emotion_extraction_handler.emotion_extraction(texts)
             for review in reviews_with_emotion:
                 id_text = review['text']['id']
-                results[id_text] = {
-                    "text": review['text']
-                }
-                results[id_text]['text']['emotion'] = review['emotion']
+                results[id_text]['text']['text'] = review['text']['text']
+                results[id_text]['text']['emotions'].append(review['emotion'])
         elif model_emotion != '' and model_emotion in other_models_emotion:
             api_sentiment_analysis = SentimentAnalysisService()
             for message in texts:
@@ -240,8 +234,6 @@ def analyze_reviews():
                 max_emotion = max(emotions['emotions'], key=emotions['emotions'].get)
                 results[message['id']]['text']['emotion'] = max_emotion
                 results[message['id']]['text']['emotions'] = emotions['emotions']
-        elif model_emotion != '' and model_emotion not in other_models_emotion:
-            return "Model not found", 404
 
         if model_features != '' and model_features == "transfeatex":
             api_feature_extraction = FeatureExtractionService()
@@ -253,8 +245,7 @@ def analyze_reviews():
                 ner_results = classifier(message['text'])
                 features = format_features(message['text'], ner_results)
                 features_with_id.append({'id': message['id'], 'features': features})
-        elif model_features != '' and model_features not in other_models_features:
-            return "Model not found", 404
+
 
         for review in features_with_id:
             id_text = review['id']

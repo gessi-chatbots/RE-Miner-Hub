@@ -1,5 +1,4 @@
 .env
 *.pyc
 *.csv
-*.json
 .coverage

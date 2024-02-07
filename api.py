@@ -54,7 +54,6 @@ def format_features(text, ner_results):
 
     if len(current_feature) > 0:
         features.append(current_feature.strip().lower())
-    print(features)
     return features
 
 
@@ -192,12 +191,11 @@ def analyze_reviews():
             return "Lacking model in proper tag.", 400
         if 'text' not in request.json.keys():
             return "Lacking textual data in proper tag.", 400
-
+        print("Request received")
         model_emotion = request.args.get("model_emotion", None)
         model_features = request.args.get("model_features", None)
         data = request.get_json()
         texts = data.get("text")
-        print(texts)
         other_models_emotion = ["BERT", "BETO"]
         other_models_features = ["t-frex-bert-base-uncased", "t-frex-bert-large-uncased", "t-frex-roberta-base",
                                  "t-frex-roberta-large", "t-frex-xlnet-base-cased", "t-frex-xlnet-large-cased"]
@@ -240,7 +238,6 @@ def analyze_reviews():
             features_with_id = api_feature_extraction.extract_features(texts)
         elif model_features != '' and model_features in other_models_features:
             for message in texts:
-                print(f"model {model_features} and text {message['text']}")
                 classifier = pipeline("ner", model="quim-motger/" + model_features)
                 ner_results = classifier(message['text'])
                 features = format_features(message['text'], ner_results)
@@ -264,7 +261,7 @@ def analyze_reviews():
                 print(f"Id_text {id_text} not found in results.")
 
         results = list(results.values())
-
+        print(f"Feature Model: {model_features}, Sentiment Model: {model_emotion}Result: {results}")
         return jsonify(results)
 
     except Exception as e:

@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: App reviews analysis API
-  description: API per l'extracció d'emocions i features a partir d'un text
+  description: API for emotion classification and feature extraction from a given short text
   version: 1.0.0
 servers:
 - url: http://localhost:3000/
@@ -9,13 +9,12 @@ servers:
 paths:
   /extract-emotion:
     post:
-      summary: Extreure l'emoció d'un conjunt de textos
-      description: Retorna un json que conté l'emoció o emocions extretes a partir
-        d'un text
+      summary: Classifies the emotions of a set of texts
+      description: Returns a JSON array containing the set of emotions from a given text
       parameters:
       - name: model_emotion
         in: query
-        description: Model a utilitzar per l'extracció de l'emoció
+        description: Model (i.e., method) used for emotion classification
         required: true
         schema:
           type: string
@@ -24,7 +23,7 @@ paths:
           - BERT
           - BETO
       requestBody:
-        description: Llista de texts a analitzar
+        description: Text list to analyze
         content:
           application/json:
             schema:
@@ -120,12 +119,12 @@ paths:
       x-codegen-request-body-name: Missatges
   /extract-features:
     post:
-      summary: Extreure les features d'un conjunt de textos
-      description: Retorna un json que conté les features extretes a partir d'un text
+      summary: Extracts the features of a set of texts
+      description: Returns a JSON array containing the set of features from a given text
       parameters:
       - name: model_features
         in: query
-        description: Model a utilitzar per l'extracció de features
+        description: Model (i.e., method) used for feature extraction
         required: true
         schema:
           type: string
@@ -138,7 +137,7 @@ paths:
           - t-frex-xlnet-base-cased
           - t-frex-xlnet-large-cased
       requestBody:
-        description: Llista de texts a analitzar
+        description: Text list to analyze
         content:
           application/json:
             schema:
@@ -237,13 +236,12 @@ paths:
       x-codegen-request-body-name: Missatges
   /analyze-reviews:
     post:
-      summary: Analitzar un conjunt de textos
-      description: Retorna un json que conté l'emoció o emocions i les features extretes
-        a partir d'un text
+      summary: Analyze a set of texts
+      description: Returns a JSON array containing the set of features and emotions from a given text
       parameters:
       - name: model_emotion
         in: query
-        description: Model a utilitzar per l'extracció de l'emoció
+        description: Model (i.e., method) used for emotion classification
         required: false
         schema:
           type: string
@@ -253,7 +251,7 @@ paths:
           - BETO
       - name: model_features
         in: query
-        description: Model a utilitzar per l'extracció de features
+        description: Model (i.e., method) used for feature extraction
         required: false
         schema:
           type: string
@@ -266,7 +264,7 @@ paths:
           - t-frex-xlnet-base-cased
           - t-frex-xlnet-large-cased
       requestBody:
-        description: Llista de texts a analitzar
+        description: Text list to analyze
         content:
           application/json:
             schema:

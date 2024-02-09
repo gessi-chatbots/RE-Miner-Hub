@@ -6,8 +6,8 @@ load_dotenv()
 
 class SentimentAnalysisService:
     def __init__(self):
-        self.endpoint = 'http://gessi-sw.essi.upc.edu:8080/sentiment-analysis-api/api/emotion'
-        self.headers = {'Authorization': os.getenv("AUTHORITATION_KEY"), 'Content-Type': 'application/json'}
+        self.endpoint = 'http://gessi-chatbots.essi.upc.edu:8081/api/emotion'
+        self.headers = {'Authorization': os.getenv("AUTHORIZATION_KEY"), 'Content-Type': 'application/json'}
 
     def get_emotions(self, model, text):
         try:

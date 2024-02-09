@@ -180,6 +180,24 @@ def extract_features():
         return f"An error occurred: {e}", 400
 
 
+def map_emotion(emotion):
+    mapped_emotion = ''
+    if emotion == 'angry':
+        mapped_emotion = 'anger'
+    elif emotion == 'happy':
+        mapped_emotion = 'happiness'
+    elif emotion == 'sad':
+        mapped_emotion = 'sadness'
+    elif emotion == 'surprise':
+        mapped_emotion = 'surprise'
+    elif emotion == 'disgust':
+        mapped_emotion = 'disgust'
+    elif emotion == 'not-relevant':
+        mapped_emotion = 'Not relevant'
+    else:
+        mapped_emotion = emotion
+    return mapped_emotion
+
 @app.route('/analyze-reviews', methods=['POST'])
 def analyze_reviews():
     try:
@@ -226,13 +244,16 @@ def analyze_reviews():
                 if emotions is None:
                     return "Error in sentiment analysis request", 500
                 else:
-                    results[message['id']] = {
-                        "text": message
-                    }
-                max_emotion = max(emotions['emotions'], key=emotions['emotions'].get)
-                results[message['id']]['text']['emotion'] = max_emotion
-                results[message['id']]['text']['emotions'] = emotions['emotions']
-
+                    max_emotion = max(emotions['emotions'], key=emotions['emotions'].get)
+                    results[id_text]['text']['text'] = message
+                    mapped_emotion = map_emotion(max_emotion)
+                    if mapped_emotion == 'Not relevant':
+                        max_value = 0
+                        for emotion, value in emotions['emotions'].items():
+                            if emotion != 'not-relevant' and value > max_value:
+                                max_value = value
+                                mapped_emotion = map_emotion(emotion)
+                    results[id_text]['text']['emotions'].append(mapped_emotion)
         if model_features != '' and model_features == "transfeatex":
             api_feature_extraction = FeatureExtractionService()
             features_with_id = api_feature_extraction.extract_features(texts)

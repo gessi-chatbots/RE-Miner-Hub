@@ -1,0 +1,735 @@
+[
+  {
+    "app_name": "WhatsApp Messenger",
+    "description": "WhatsApp from Meta is a FREE messaging and video calling app. It\u2019s used by over 2B people in more than 180 countries. It\u2019s simple, reliable, and private, so you can easily keep in touch with your friends and family. WhatsApp works across mobile and desktop even on slow connections, with no subscription fees*.\r\n\r\nPrivate messaging across the world\r\n\r\nYour personal messages and calls to friends and family are end-to-end encrypted. No one outside of your chats, not even WhatsApp, can read or listen to them.\r\n\r\nSimple and secure connections, right away\r\n\r\nAll you need is your phone number, no user names or logins. You can quickly view your contacts who are on WhatsApp and start messaging.\r\n\r\nHigh quality voice and video calls\r\n\r\nMake secure video and voice calls with up to 8 people for free*. Your calls work across mobile devices using your phone\u2019s Internet service, even on slow connections.\r\n\r\nGroup chats to keep you in contact\r\n\r\nStay in touch with your friends and family. End-to-end encrypted group chats let you share messages, photos, videos and documents across mobile and desktop.\r\n\r\nStay connected in real time\r\n\r\nShare your location with only those in your individual or group chat, and stop sharing at any time. Or record a voice message to connect quickly.\r\n\r\nShare daily moments through Status\r\n\r\nStatus allows you to share text, photos, video and GIF updates that disappear after 24 hours. You can choose to share status posts with all your contacts or just selected ones.\r\n\r\n\r\n*Data charges may apply. Contact your provider for details.\r\n\r\n---------------------------------------------------------\r\n\r\nIf you have any feedback or questions, please go to WhatsApp > Settings > Help > Contact Us",
+    "summary": "Simple. Reliable. Private.",
+    "category": "Communication",
+    "categoryId": "COMMUNICATION",
+    "in_app_purchases": false,
+    "android_version": null,
+    "developer": "WhatsApp LLC",
+    "developer_site": "http://www.whatsapp.com/",
+    "release_date": "Oct 18, 2010",
+    "current_version_release_date": "Sep 12, 2022",
+    "version": "2.22.19.76",
+    "changelog": null,
+    "reviews": [
+      {
+        "reviewId": "e2a68d83-fd26-3021-bcfa-73d46b6a932e",
+        "review": "I sad about the stickers feature!. Also I would love to say that I am so angry regarding the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Sep 16, 2022"
+      },
+      {
+        "reviewId": "c35d1ce7-48b3-38e3-afe6-36082b3aa92c",
+        "review": "I am happy about the stickers feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 3,
+        "at": "Sep 15, 2022"
+      },
+      {
+        "reviewId": "87fc7073-27ee-3ee1-9863-d106e7b97634",
+        "review": "I am happy about the stickers feature!. Also I would love to say that I am so angry regarding the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Oct 04, 2022"
+      },
+      {
+        "reviewId": "f2856dc1-4f15-3b04-9ed0-0c877f9b9397",
+        "review": "I am so angry regarding the Voice chat feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Oct 09, 2022"
+      },
+      {
+        "reviewId": "c54d4170-a631-3f51-b165-bf6042fd02f2",
+        "review": "I am so angry regarding the stickers feature!. Also I would love to say that I am happy about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 16, 2022"
+      },
+      {
+        "reviewId": "19c09f00-b852-46db-904c-a3b786122dfa",
+        "review": "I love the stickers feature. I don't like the messaging speed",
+        "reply": null,
+        "userName": "Arslan Alam",
+        "score": 1,
+        "at": "Sep 12, 2022"
+      },
+      {
+        "reviewId": "c54d4170-a631-3f51-b165-bf6042fd02f2",
+        "review": "I am so angry regarding the stickers feature!. Also I would love to say that I am happy about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Sep 20, 2022"
+      },
+      {
+        "reviewId": "c47d1702-0696-3c38-92f1-85337841111b",
+        "review": "I am happy about the stickers feature!. Also I would love to say that I disgusted with the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 26, 2022"
+      },
+      {
+        "reviewId": "40db6687-c8e8-3f7d-9a2b-e50e1551ad56",
+        "review": "I am so angry regarding the Private Chat feature!. Also I would love to say that I sad about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Sep 20, 2022"
+      },
+      {
+        "reviewId": "3164ffcf-c96c-3d29-8faf-6276cfa3d2f4",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Sep 25, 2022"
+      },
+      {
+        "reviewId": "fe067131-bb91-325a-a5d3-b21fa046b87d",
+        "review": "I am happy about the Voice chat feature!. Also I would love to say that I sad about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 27, 2022"
+      },
+      {
+        "reviewId": "3f363880-7135-367a-b064-d76423bcd0ab",
+        "review": "I am surprised with the Voice chat feature!. Also I would love to say that I am so angry regarding the Voice chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Oct 11, 2022"
+      },
+      {
+        "reviewId": "63e9448e-c257-3633-8a3e-ae9e32f54a1e",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am happy about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 23, 2022"
+      },
+      {
+        "reviewId": "7ccacbc2-484a-3205-a12f-917a803bb6c6",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 14, 2022"
+      },
+      {
+        "reviewId": "0e011268-d519-394d-8f51-8f4ee2ebdd1a",
+        "review": "I am happy about the Voice chat feature!. Also I would love to say that I am surprised with the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Sep 28, 2022"
+      },
+      {
+        "reviewId": "c35d1ce7-48b3-38e3-afe6-36082b3aa92c",
+        "review": "I am happy about the stickers feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Sep 29, 2022"
+      },
+      {
+        "reviewId": "c99659fb-bc9f-31e2-b335-f284cd22c069",
+        "review": "I am happy about the Private Chat feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Sep 28, 2022"
+      },
+      {
+        "reviewId": "e224a396-e007-3e70-9b4f-564e0d868332",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am so angry regarding the Voice chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Sep 16, 2022"
+      },
+      {
+        "reviewId": "39197881-7431-311b-9893-ff7db84523e9",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Oct 08, 2022"
+      },
+      {
+        "reviewId": "7ccacbc2-484a-3205-a12f-917a803bb6c6",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Oct 08, 2022"
+      }
+    ]
+  },
+  {
+    "app_name": "Facebook Lite",
+    "description": "Keeping up with friends is faster and easier than ever with the Facebook Lite app! Use Facebook Lite as a friends app to connect and keep up with your social network. The Facebook Lite app is small, allowing you to save space on your phone and use Facebook in 2G conditions. Many of the classic features of Facebook are available on the app, such as sharing to a Timeline, liking photos, searching for people, and editing your profile and groups. Specific features include:\r\n \r\n \u2022 Find friends and family\r\n \u2022 Post status updates & use Facebook emoji to help relay what\u2019s going on in your world\r\n \u2022 Share photos and your favorite memes\r\n \u2022 Get notified when friends like and comment on your posts\r\n \u2022 Find local social events, RSVP, and make plans to meet up with friends\r\n \u2022 Interact with your friends by adding your own comments or reactions to their Facebook posts\r\n \u2022 Save photos by adding them to photo albums\r\n \u2022 Follow people to get their latest news\r\n \u2022 Look up local businesses to see reviews, operation hours, and pictures\r\n \u2022 Buy and sell locally on Facebook Marketplace\r\n \r\nThe Facebook app does more than help you stay connected with your friends and interests. It's also your personal organizer for storing, saving and sharing photos. It's easy to share photos straight from your Android camera, and you have full control over your photos and privacy settings. You can choose when to keep individual photos private or even set up a secret photo album to control who sees it.\r\n \r\nFacebook Lite also helps you keep up with the latest news and current events around the world. Subscribe to your favorite celebrities, brands, websites, artists, or sports teams to follow their News Feeds from the convenience of your Facebook Lite app!\r\n\r\n\r\nProblems with downloading or installing the app? See https://www.facebook.com/help/fblite \r\nStill need help? Please tell us more about the issue: https://www.facebook.com/help/contact/640732869364975\r\nFacebook is only available to people aged 13 and over.\r\nTerms of Service: http://m.facebook.com/terms.php",
+    "summary": "This version of Facebook uses less data and works in all network conditions.",
+    "category": "Social",
+    "categoryId": "SOCIAL",
+    "in_app_purchases": false,
+    "android_version": null,
+    "developer": "Meta Platforms, Inc.",
+    "developer_site": "https://www.facebook.com/facebook",
+    "release_date": "Mar 15, 2018",
+    "current_version_release_date": "Sep 11, 2022",
+    "version": "Varies with device",
+    "changelog": null,
+    "reviews": [
+      {
+        "reviewId": "97f34a10-2442-3e19-81d8-c1fc5ecd6d45",
+        "review": "I am so angry regarding the Voice chat feature!. Also I would love to say that I am so angry regarding the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Sep 16, 2022"
+      },
+      {
+        "reviewId": "3ecbb943-8c6b-3c5e-94f9-6c93048fb711",
+        "review": "I sad about the Voice chat feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 3,
+        "at": "Sep 22, 2022"
+      },
+      {
+        "reviewId": "71b15a70-92b2-3216-b86c-d8fed7c7ba0b",
+        "review": "I am so angry regarding the Private Chat feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 3,
+        "at": "Sep 21, 2022"
+      },
+      {
+        "reviewId": "cfbc20d9-5a0e-324a-9d63-de279415270c",
+        "review": "I sad about the Video Calling feature!. Also I would love to say that I am happy about the Voice chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Sep 29, 2022"
+      },
+      {
+        "reviewId": "2feb3e64-c6f3-3cc0-9790-a89ab83694c3",
+        "review": "I am surprised with the Private Chat feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 3,
+        "at": "Sep 29, 2022"
+      },
+      {
+        "reviewId": "8b19eab8-b4de-35ee-a606-112aa0bd19e1",
+        "review": "I sad about the stickers feature!. Also I would love to say that I am happy about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Oct 07, 2022"
+      },
+      {
+        "reviewId": "3e5889db-0003-3a4b-9281-417ce9ef22d2",
+        "review": "I am surprised with the Voice chat feature!. Also I would love to say that I am so angry regarding the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Oct 01, 2022"
+      },
+      {
+        "reviewId": "53350c04-30f5-3ff6-b50d-8ce487e74077",
+        "review": "I sad about the Voice chat feature!. Also I would love to say that I am surprised with the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 3,
+        "at": "Sep 30, 2022"
+      },
+      {
+        "reviewId": "7ccacbc2-484a-3205-a12f-917a803bb6c6",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Sep 19, 2022"
+      },
+      {
+        "reviewId": "4189d23d-804d-3158-97b5-c3b9e2a8ccb4",
+        "review": "I am happy about the Private Chat feature!. Also I would love to say that I sad about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Sep 13, 2022"
+      },
+      {
+        "reviewId": "5af42f4d-ade2-32a3-8c88-f85b37cdabb2",
+        "review": "I am happy about the Private Chat feature!. Also I would love to say that I am surprised with the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Oct 08, 2022"
+      },
+      {
+        "reviewId": "18ee5f21-1b26-311d-ae01-2f5e38e32d0b",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Oct 12, 2022"
+      },
+      {
+        "reviewId": "4f616225-3420-377c-8903-ccbad07c62fa",
+        "review": "I am happy about the Private Chat feature!. Also I would love to say that I sad about the Voice chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Oct 01, 2022"
+      },
+      {
+        "reviewId": "4fc07db8-9c05-34e9-b5b2-929b16d218f4",
+        "review": "I disgusted with the Private Chat feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 25, 2022"
+      },
+      {
+        "reviewId": "b6b9d749-a901-32ad-8ec3-8c3be95fc7f8",
+        "review": "I am surprised with the stickers feature!. Also I would love to say that I sad about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 22, 2022"
+      },
+      {
+        "reviewId": "d7d4a3e6-b638-3a54-86f9-fa226b33c835",
+        "review": "I am so angry regarding the Voice messages feature!. Also I would love to say that I am happy about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Sep 26, 2022"
+      },
+      {
+        "reviewId": "39197881-7431-311b-9893-ff7db84523e9",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Oct 01, 2022"
+      },
+      {
+        "reviewId": "7b4ccda7-7606-38ba-96d8-7dee4a5431fa",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am happy about the Voice chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Sep 25, 2022"
+      },
+      {
+        "reviewId": "3164ffcf-c96c-3d29-8faf-6276cfa3d2f4",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Sep 30, 2022"
+      },
+      {
+        "reviewId": "64608f36-3497-3d1f-8495-f7df89925847",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am happy about the Voice chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Oct 04, 2022"
+      }
+    ]
+  },
+  {
+    "app_name": "Strava: Run, Ride, Hike",
+    "categories": [
+      "Trail Tracking"
+    ],
+    "description": "Strava makes fitness tracking social. We house your entire active journey in one spot \u2013 and you get to share it with friends. Here\u2019s how:\r\n\r\n\u2022 Record everything \u2013 runs, rides, hikes, yoga and over 30 other sport types. Think of Strava as the homebase of your movement.\r\n\r\n\u2022 Discover anywhere \u2013 our Routes tool uses de-identified Strava data to intelligently recommend popular routes based on your preferences. You can also build your own.\r\n\r\n\u2022 Build a support network \u2013 Strava\u2019s about celebrating movement. Here you\u2019ll find your community and cheer each other on.\r\n\r\n\u2022 Train smarter \u2013 get data insights to understand your progress and see how you improve. Your Training Log is the record of all your workouts.\r\n\r\n\u2022 Move safer \u2013 share your real-time location with loved ones while outdoors for an extra layer of safety.\r\n\r\n\u2022 Sync your favorite apps and devices \u2013 Strava is compatible with thousands of them (Wear OS, Samsung, Fitbit, Garmin \u2013 you name it).\r\n\r\n\u2022 Join and create challenges \u2013 join millions in monthly challenges to chase new goals, collect digital badges and stay accountable.\r\n\r\n\u2022 Embrace the unfiltered \u2013 your feed on Strava is filled with real efforts from real people. That\u2019s how we motivate each other.\r\n\r\n\u2022 Whether you\u2019re a world-class athlete or a total beginner, you belong here. Just record and go.\r\n\r\nStrava includes both a free version and a subscription version with premium features.\r\n\r\nTerms of Service: https://www.strava.com/legal/terms\r\nPrivacy Policy: https://www.strava.com/legal/privacy\r\n\r\nNOTE ON GPS SUPPORT: Strava depends on GPS for recording activities. In some devices, the GPS does not work properly and Strava will not record effectively. If your Strava recordings show poor location estimation behavior, please try to update the operating system to the most recent version. There are some devices which have consistently poor performance with no known remedies. On these devices, we restrict installation of Strava, for example the Samsung Galaxy Ace 3 and the Galaxy Express 2. \r\nSee our support site for more information: https://support.strava.com/hc/en-us/articles/216919047-Supported-Android-devices-and-Android-operating-systems",
+    "summary": "Track your active life in one place and share the journey with friends.",
+    "category": "Health & Fitness",
+    "categoryId": "HEALTH_AND_FITNESS",
+    "in_app_purchases": true,
+    "android_version": null,
+    "developer": "Strava Inc.",
+    "developer_site": "https://www.strava.com/",
+    "release_date": "Jun 9, 2011",
+    "current_version_release_date": "Sep 12, 2022",
+    "version": "Varies with device",
+    "changelog": "Lorem ipsum dolor sit amet",
+    "n_reviews": 28190,
+    "reviews": [
+      {
+        "reviewId": "106d7a00-5002-3c73-ad6a-caa1cef8f985",
+        "review": "I am happy about the stickers feature!. Also I would love to say that I am happy about the Voice chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Sep 13, 2022"
+      },
+      {
+        "reviewId": "93245aff-cb0b-38a5-ae56-c24f0efe9966",
+        "review": "I am so angry regarding the stickers feature!. Also I would love to say that I sad about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 19, 2022"
+      },
+      {
+        "reviewId": "c99659fb-bc9f-31e2-b335-f284cd22c069",
+        "review": "I am happy about the Private Chat feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 25, 2022"
+      },
+      {
+        "reviewId": "c99659fb-bc9f-31e2-b335-f284cd22c069",
+        "review": "I am happy about the Private Chat feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 19, 2022"
+      },
+      {
+        "reviewId": "64608f36-3497-3d1f-8495-f7df89925847",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am happy about the Voice chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Oct 08, 2022"
+      },
+      {
+        "reviewId": "616a1d85-bab1-3cbc-91c7-ba46f94d1f3b",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am happy about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Sep 24, 2022"
+      },
+      {
+        "reviewId": "3164ffcf-c96c-3d29-8faf-6276cfa3d2f4",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Oct 05, 2022"
+      },
+      {
+        "reviewId": "5a337d52-84c7-3bf9-a9c4-df657d2e069f",
+        "review": "I am happy about the Private Chat feature!. Also I would love to say that I am happy about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Sep 18, 2022"
+      },
+      {
+        "reviewId": "3f86fe3e-775e-3e3a-965d-2237f51bf909",
+        "review": "I am so angry regarding the Voice chat feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Oct 06, 2022"
+      },
+      {
+        "reviewId": "430b2bc9-90e2-3187-b8a9-4721f709612a",
+        "review": "I sad about the Private Chat feature!. Also I would love to say that I am happy about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Oct 11, 2022"
+      },
+      {
+        "reviewId": "c99659fb-bc9f-31e2-b335-f284cd22c069",
+        "review": "I am happy about the Private Chat feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Oct 07, 2022"
+      },
+      {
+        "reviewId": "3f478f96-28fb-37d1-914b-ff1714ebf028",
+        "review": "I am so angry regarding the Voice chat feature!. Also I would love to say that I am so angry regarding the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 3,
+        "at": "Oct 10, 2022"
+      },
+      {
+        "reviewId": "699b3587-3bb4-3a5d-a6ae-9d92f0e98e0d",
+        "review": "I am so angry regarding the Voice messages feature!. Also I would love to say that I sad about the Voice chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Sep 23, 2022"
+      },
+      {
+        "reviewId": "4bab45e0-6b67-3496-b9b9-01036fbc8af8",
+        "review": "I am so angry regarding the Voice chat feature!. Also I would love to say that I am happy about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Oct 06, 2022"
+      },
+      {
+        "reviewId": "d7d4a3e6-b638-3a54-86f9-fa226b33c835",
+        "review": "I am so angry regarding the Voice messages feature!. Also I would love to say that I am happy about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Oct 08, 2022"
+      },
+      {
+        "reviewId": "27b8ec12-0076-3eea-8042-245856fcd73f",
+        "review": "I am so angry regarding the Video Calling feature!. Also I would love to say that I am happy about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 3,
+        "at": "Oct 04, 2022"
+      },
+      {
+        "reviewId": "c8a686e3-c35c-392a-8d7a-d59b4421d8a0",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am so angry regarding the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Sep 27, 2022"
+      },
+      {
+        "reviewId": "0cc64f46-cbeb-31c0-b545-2833b700f66e",
+        "review": "I am so angry regarding the Voice messages feature!. Also I would love to say that I am happy about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Sep 21, 2022"
+      },
+      {
+        "reviewId": "0e011268-d519-394d-8f51-8f4ee2ebdd1a",
+        "review": "I am happy about the Voice chat feature!. Also I would love to say that I am surprised with the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 3,
+        "at": "Oct 11, 2022"
+      },
+      {
+        "reviewId": "b3cb29d1-baff-38f5-a17f-1b6e67fb35cc",
+        "review": "I am happy about the Voice chat feature!. Also I would love to say that I sad about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Sep 18, 2022"
+      }
+    ],
+    "similar_apps": null,
+    "package_name": "com.strava",
+    "other_apps": null,
+    "play_store_link": "https://play.google.com/store/apps/details?id=com.strava&hl=en&gl=us",
+    "features": [
+      "Route Planning",
+      "Running",
+      "Cycling",
+      "IFTTT integration"
+    ],
+    "tags": [
+      "Sports Tracking",
+      "run-tracking",
+      "gps-tracking",
+      "bicycle",
+      "gps",
+      "Fitness",
+      "run-tracking"
+    ],
+    "is_open_source": false,
+    "repository": null
+  },
+  {
+    "app_name": "Telegram",
+    "description": "Pure instant messaging \u2014 simple, fast, secure, and synced across all your devices. One of the world's top 10 most downloaded apps with over 500 million active users.\r\n\r\nFAST: Telegram is the fastest messaging app on the market, connecting people via a unique, distributed network of data centers around the globe.\r\n\r\nSYNCED: You can access your messages from all your phones, tablets and computers at once. Telegram apps are standalone, so you don\u2019t need to keep your phone connected. Start typing on one device and finish the message from another. Never lose your data again.\r\n\r\nUNLIMITED: You can send media and files, without any limits on their type and size. Your entire chat history will require no disk space on your device, and will be securely stored in the Telegram cloud for as long as you need it. \r\n\r\nSECURE: We made it our mission to provide the best security combined with ease of use. Everything on Telegram, including chats, groups, media, etc. is encrypted using a combination of 256-bit symmetric AES encryption, 2048-bit RSA encryption, and Diffie\u2013Hellman secure key exchange. \r\n\r\n100% FREE & OPEN: Telegram has a fully documented and free API for developers, open source apps and verifiable builds to prove the app you download is built from the exact same source code that is published. \r\n\r\nPOWERFUL: You can create group chats with up to 200,000 members, share large videos, documents of any type (.DOCX, .MP3, .ZIP, etc.) up to 2 GB each, and even set up bots for specific tasks. Telegram is the perfect tool for hosting online communities and coordinating teamwork.\r\n\r\nRELIABLE: Built to deliver your messages using as little data as possible, Telegram is the most reliable messaging system ever made. It works even on the weakest mobile connections. \r\n\r\nFUN: Telegram has powerful photo and video editing tools, animated stickers and emoji, fully customizable themes to change the appearance of your app, and an open sticker/GIF platform to cater to all your expressive needs.\r\n\r\nSIMPLE: While providing an unprecedented array of features, we take great care to keep the interface clean. Telegram is so simple you already know how to use it.\r\n\r\nPRIVATE: We take your privacy seriously and will never give any third parties access to your data. You can delete any message you ever sent or received for both sides, at any time and without a trace. Telegram will never use your data to show you ads.\r\n\r\nFor those interested in maximum privacy, Telegram offers Secret Chats. Secret Chat messages can be programmed to self-destruct automatically from both participating devices. This way you can send all types of disappearing content \u2014 messages, photos, videos, and even files. Secret Chats use End-to-End Encryption to ensure that a message can only be read by its intended recipient.\r\n\r\nWe keep expanding the boundaries of what you can do with a messaging app. Don\u2019t wait years for older messengers to catch up with Telegram \u2014 join the revolution today.",
+    "summary": "Telegram is a messaging app with a focus on speed and security.",
+    "category": "Communication",
+    "categoryId": "COMMUNICATION",
+    "in_app_purchases": true,
+    "android_version": null,
+    "developer": "Telegram FZ-LLC",
+    "developer_site": "https://telegram.org",
+    "release_date": "Sep 6, 2013",
+    "current_version_release_date": "Aug 14, 2022",
+    "version": "8.9.3",
+    "changelog": "Custom Animated Emoji\r\n\u2022 Include animated emoji in messages and captions.\r\n\u2022 Premium users unlock over 500 new emoji, including custom packs with unique characters.\r\n\u2022 All users can view any emoji \u2013 and try them out in the Saved Messages chat.\r\n\r\nPremium: Voice Message Privacy Settings\r\n\u2022 Control who can send you voice and video messages with Telegram Premium.\r\n\r\nGifting Telegram Premium\r\n\u2022 Send a Premium subscription to any user from their profile.\r\n\u2022 Choose 3, 6, or 12 months \u2013 at a discount.",
+    "reviews": [
+      {
+        "reviewId": "0eea0428-49c8-37ef-b3d6-96dfe71c005b",
+        "review": "I sad about the Video Calling feature!. Also I would love to say that I sad about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 10, 2022"
+      },
+      {
+        "reviewId": "b2b33f41-6b0e-3015-a634-17253dc3df47",
+        "review": "I am happy about the stickers feature!. Also I would love to say that I am happy about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Sep 07, 2022"
+      },
+      {
+        "reviewId": "5cc0401b-ff1b-3b42-882b-9d8bb1ebbb6e",
+        "review": "I am so angry regarding the stickers feature!. Also I would love to say that I disgusted with the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Aug 26, 2022"
+      },
+      {
+        "reviewId": "835a2d4c-9ce4-397f-a1a9-d6ba58fa68ae",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am happy about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Aug 25, 2022"
+      },
+      {
+        "reviewId": "cfbc20d9-5a0e-324a-9d63-de279415270c",
+        "review": "I sad about the Video Calling feature!. Also I would love to say that I am happy about the Voice chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Aug 31, 2022"
+      },
+      {
+        "reviewId": "6e67a15d-d68b-307c-9493-5d0a61152a18",
+        "review": "I am so angry regarding the Video Calling feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Aug 16, 2022"
+      },
+      {
+        "reviewId": "871878a7-deaf-3e75-abca-0bdbdb19c328",
+        "review": "I am happy about the Voice chat feature!. Also I would love to say that I am happy about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Aug 18, 2022"
+      },
+      {
+        "reviewId": "6635a59a-6c05-31df-9dc5-1093c1e9c75c",
+        "review": "I am happy about the Private Chat feature!. Also I would love to say that I am happy about the Private Chat feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Aug 26, 2022"
+      },
+      {
+        "reviewId": "3726482f-0e6c-35b5-bab3-29c2556ea69f",
+        "review": "I disgusted with the Video Calling feature!. Also I would love to say that I fear so much the the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Sep 07, 2022"
+      },
+      {
+        "reviewId": "c8a686e3-c35c-392a-8d7a-d59b4421d8a0",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am so angry regarding the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 3,
+        "at": "Sep 12, 2022"
+      },
+      {
+        "reviewId": "616a1d85-bab1-3cbc-91c7-ba46f94d1f3b",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am happy about the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 12, 2022"
+      },
+      {
+        "reviewId": "aa15c8d9-49e5-3086-96ca-7e03123b4d71",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am surprised with the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Aug 22, 2022"
+      },
+      {
+        "reviewId": "700b086e-452f-35d8-aad3-d06856a4aa5d",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am happy about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Aug 29, 2022"
+      },
+      {
+        "reviewId": "3177bb2c-4659-33e6-901f-cad8dab4c57d",
+        "review": "I sad about the Voice messages feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 4,
+        "at": "Sep 09, 2022"
+      },
+      {
+        "reviewId": "18ee5f21-1b26-311d-ae01-2f5e38e32d0b",
+        "review": "I am happy about the Voice messages feature!. Also I would love to say that I am happy about the Video Calling feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 10, 2022"
+      },
+      {
+        "reviewId": "c54d4170-a631-3f51-b165-bf6042fd02f2",
+        "review": "I am so angry regarding the stickers feature!. Also I would love to say that I am happy about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Aug 19, 2022"
+      },
+      {
+        "reviewId": "183a6738-1d36-3c22-b299-e823f7e98ff4",
+        "review": "I am happy about the stickers feature!. Also I would love to say that I am surprised with the Voice messages feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Aug 30, 2022"
+      },
+      {
+        "reviewId": "63e9448e-c257-3633-8a3e-ae9e32f54a1e",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am happy about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 1,
+        "at": "Sep 06, 2022"
+      },
+      {
+        "reviewId": "63e9448e-c257-3633-8a3e-ae9e32f54a1e",
+        "review": "I am happy about the Video Calling feature!. Also I would love to say that I am happy about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 2,
+        "at": "Sep 14, 2022"
+      },
+      {
+        "reviewId": "123f5a96-be94-345d-b1ae-5cdca92dd76b",
+        "review": "I am so angry regarding the Private Chat feature!. Also I would love to say that I am happy about the stickers feature",
+        "reply": null,
+        "userName": "Random User",
+        "score": 5,
+        "at": "Aug 26, 2022"
+      }
+    ]
+  }
+]

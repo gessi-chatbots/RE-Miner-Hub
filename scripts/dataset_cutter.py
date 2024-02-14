@@ -16,10 +16,10 @@ def limit_reviews(app_data, max_reviews_per_app=200, reviews_per_day_increment=1
 
 
 def main():
-    with open('./data/big_dataset.json', 'r', encoding='utf-8') as file:
+    with open('../data/big_dataset.json', 'r', encoding='utf-8') as file:
         app_data = json.load(file)
     app_data_with_limited_reviews = limit_reviews(app_data, max_reviews_per_app=200, reviews_per_day_increment=10)
-    with open('./data/small_dataset.json', 'w', encoding='utf-8') as output_file:
+    with open('../data/small_dataset.json', 'w', encoding='utf-8') as output_file:
         json.dump(app_data_with_limited_reviews, output_file, ensure_ascii=False, indent=2)
 
 

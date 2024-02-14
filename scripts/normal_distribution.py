@@ -9,7 +9,7 @@ def truncated_normal(mean, sd, lower, upper):
     return truncnorm((lower - mean) / sd, (upper - mean) / sd, loc=mean, scale=sd)
 
 
-def update_reviews(app_data, exclusion_date):
+def update_reviews(app_data):
     sentiments = ['happiness', 'sadness', 'anger', 'surprise', 'fear', 'disgust']
     sentiment_probabilities = [0.57, 0.12, 0.21, 0.07, 0.01, 0.02]
     features = [
@@ -68,12 +68,12 @@ def update_reviews(app_data, exclusion_date):
 def main():
     exclusion_date = datetime.strptime("2022-09-19", "%Y-%m-%d").date()
 
-    with open("./data/data.json", "r", encoding="utf-8") as file:
+    with open("../data/data.json", "r", encoding="utf-8") as file:
         data = json.load(file)
 
     updated_data = update_reviews(data, exclusion_date)
 
-    with open("./data/result_data.json", "w", encoding="utf-8") as result_file:
+    with open("../data/result_data.json", "w", encoding="utf-8") as result_file:
         json.dump(updated_data, result_file, indent=2, ensure_ascii=False)
 
     print("Updated data saved to result_data.json.")

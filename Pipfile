@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+openai = "*"
+python-dotenv = "*"
+requests = "*"
+jsonlines = "*"
+scikit-learn = "*"
+matplotlib = "*"
+seaborn = "*"
+flask = "*"
+flask-cors = "*"
+flask-swagger-ui = "*"
+transformers = "*"
+[dev-packages]
+
+[requires]
+python_version = "3.9"

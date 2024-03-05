@@ -1,13 +1,15 @@
 FROM python:3.9
 
-WORKDIR /app
+WORKDIR /wsgi
 
-COPY . /app
+COPY Pipfile Pipfile.lock /wsgi/
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install pipenv
+
+RUN pipenv install --deploy --ignore-pipfile
+
+COPY . /wsgi
 
 EXPOSE 3000
 
-ENV FLASK_APP=api.py
-
-CMD ["flask", "run", "--host=0.0.0.0"]
+CMD ["pipenv", "run", "flask", "run", "--host=0.0.0.0", "--port=3000"]

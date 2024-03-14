@@ -29,3 +29,22 @@ class EmotionExtractionService:
         except Exception as e:
             print("\033[91m\u2718 " + f"An error occurred: {e}")
             return None
+        
+    def emotion_extraction_aux(self, review):
+        try:
+            result = {}
+            completion = client.chat.completions.create(
+                model=self.fine_tuned_model,
+                messages=[
+                    {"role": "system", "content": "Can you tell me what emotion is expressing the review above? It can be one of the following: happiness, sadness, anger, fear, surprise or disgust."},
+                    {"role": "user", "content": review}
+                ]
+            )
+            if completion is None:
+                return "An error occurred"
+            result = {'emotion': completion.choices[0].message.content}
+            return result
+
+        except Exception as e:
+            print("\033[91m\u2718 " + f"An error occurred: {e}")
+            return None

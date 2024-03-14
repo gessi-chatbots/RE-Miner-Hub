@@ -1,8 +1,8 @@
-from flask import Flask, request, jsonify, send_file
+import json
+from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 from transformers import pipeline
-
 from src.emotion_extraction_service import EmotionExtractionService
 from src.feature_extraction_service import FeatureExtractionService
 from src.sentiment_analysis_service import SentimentAnalysisService
@@ -198,8 +198,44 @@ def map_emotion(emotion):
         mapped_emotion = emotion
     return mapped_emotion
 
-@app.route('/analyze-reviews', methods=['POST'])
+@app.route('/analyze', methods=['POST'])
 def analyze_reviews():
+    try:
+        if not request.args \
+                or ('sentiment_model' not in request.args.keys() and 'feature_model' not in request.args.keys()) \
+                and 'text' not in request.json.keys():
+            return "Lacking model and textual data in proper tag.", 400
+        if 'sentiment_model' not in request.args.keys() and 'feature_model' not in request.args.keys():
+            return "Lacking model in proper tag.", 400
+
+        sentiment_model = request.args.get("sentiment_model", None)
+        feature_model = request.args.get("feature_model", None)
+        expected_sentiment_models = ["BERT", "BETO", "GPT-3.5"]
+        expected_feature_models = ["transfeatex", "t-frex-bert-base-uncased", "t-frex-bert-large-uncased", "t-frex-roberta-base",
+                                 "t-frex-roberta-large", "t-frex-xlnet-base-cased", "t-frex-xlnet-large-cased"]
+        if sentiment_model is not None and sentiment_model not in expected_sentiment_models:
+            return make_response(jsonify({'message': 'Unknown sentiment model'}), 400)       
+        if feature_model is not None and feature_model not in expected_feature_models:
+            return make_response(jsonify({'message': 'Unknown sentiment model'}), 400)
+        
+        reviews = request.get_json()
+
+        if reviews is None:
+            return make_response(jsonify({'message': 'no reviews submitted for analysis'}), 400)        
+        reviews_dict = json.loads(reviews)
+        for review in reviews_dict:
+            for sentence in review["sentences"]:
+                if sentiment_model != '' and sentiment_model == "GPT-3.5":
+                    emotion_extraction_handler = EmotionExtractionService()
+                    sentence_sentiment = emotion_extraction_handler.emotion_extraction_aux(sentence["text"])
+                    sentence["sentiment"] = sentence_sentiment["emotion"]
+        
+        return make_response(jsonify(reviews_dict), 200)
+    except Exception as e:
+        return f"An error occurred: {e}", 500
+    
+@app.route('/analyze-reviews', methods=['POST'])
+def analyze():
     try:
         if not request.args \
                 or ('model_emotion' not in request.args.keys() and 'model_features' not in request.args.keys()) \

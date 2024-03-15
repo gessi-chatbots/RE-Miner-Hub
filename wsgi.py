@@ -223,13 +223,39 @@ def analyze_reviews():
         if reviews is None:
             return make_response(jsonify({'message': 'no reviews submitted for analysis'}), 400)        
         reviews_dict = json.loads(reviews)
+        features_with_id = []
         for review in reviews_dict:
             for sentence in review["sentences"]:
                 if sentiment_model != '' and sentiment_model == "GPT-3.5":
                     emotion_extraction_handler = EmotionExtractionService()
                     sentence_sentiment = emotion_extraction_handler.emotion_extraction_aux(sentence["text"])
                     sentence["sentiment"] = sentence_sentiment["emotion"]
-        
+                elif sentiment_model != '' and sentiment_model in expected_sentiment_models:
+                    api_sentiment_analysis = SentimentAnalysisService()
+                    emotions = api_sentiment_analysis.get_emotions(sentiment_model, sentence["text"])
+                    if emotions is None:
+                        return "Error in sentiment analysis request", 500
+                    else:
+                        max_emotion = max(emotions['emotions'], key=emotions['emotions'].get)
+                        mapped_emotion = map_emotion(max_emotion)
+                        if mapped_emotion == 'Not relevant':
+                            max_value = 0
+                            for emotion, value in emotions['emotions'].items():
+                                if emotion != 'not-relevant' and value > max_value:
+                                    max_value = value
+                                    mapped_emotion = map_emotion(emotion)
+                                    sentence["sentiment"] = mapped_emotion
+                if feature_model != '' and feature_model == "transfeatex":
+                    api_feature_extraction = FeatureExtractionService()
+                    features_with_id = api_feature_extraction.extract_features(sentence["text"])
+                elif feature_model != '' and feature_model in expected_feature_models:
+                    classifier = pipeline("ner", model="quim-motger/" + feature_model)
+                    ner_results = classifier(sentence['text'])
+                    features = format_features(sentence['text'], ner_results)
+                    print(features)
+                    if len(features) > 0:
+                        sentence['feature'] = features[0] # TODO discuss if multiple features
+                    # features_with_id.append({'id': sentence['id'], 'features': features})  
         return make_response(jsonify(reviews_dict), 200)
     except Exception as e:
         return f"An error occurred: {e}", 500

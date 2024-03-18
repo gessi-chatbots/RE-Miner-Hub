@@ -279,16 +279,32 @@ def analyze_reviews():
 
         analyzed_reviews = []
         for review in reviews_dict:
-            if review['sentences'] is not None:
-                sentences = [SentenceDTO(**sentence) for sentence in review['sentences']]
-            else:
-                sentences = []
-            review_dto = ReviewResponseDTO(id=review['reviewId'], applicationId=review['applicationId'], review=review['review'], sentences=sentences)
+            app_identifier = review.get('applicationId')
+            id = review.get('reviewId')
+            body = review.get('review')
+            sentences_json = review.get('sentences')
+            sentences = []
+            if sentences_json is not None:
+                for sentence_json in sentences_json:
+                    sentence = SentenceDTO(id=sentence_json.get('id'), sentimentData=None, featureData=None, text=sentence_json.get('text'))
+                    if 'sentimentData' in sentence_json:
+                        sentimentData = sentence_json.get('sentimentData', None)
+                        if sentimentData is not None:
+                            sentimentDTO = SentimentDTO(id=sentimentData.get('id'), sentiment=sentimentData.get('sentiment'))
+                            sentence.sentimentData = sentimentDTO
+                    if 'featureData' in sentence_json: 
+                        featureData = sentence_json.get('featureData', None)
+                        if featureData is not None:
+                            featureDTO = FeatureDTO(id=featureData.get('id'), feature=featureData.get('feature'))
+                            sentence.featureData = featureDTO
+                    sentences.append(sentence)
+            review_dto = ReviewResponseDTO(id=id, applicationId=app_identifier, review=body, sentences=sentences)
+
             for index, sentence in enumerate(review_dto.sentences):
                 if sentiment_model != '' and sentiment_model == "GPT-3.5":
                     emotion_extraction_handler = EmotionExtractionService()
                     sentence_sentiment = emotion_extraction_handler.emotion_extraction_aux(sentence.text)
-                    sentiment_id = sentence.id + '_s_' + str(index)
+                    sentiment_id = sentence.id + '_s_' + str(0) # in a future we may add a list
                     sentiment =  sentence_sentiment["emotion"]
                     sentiment_dto = SentimentDTO(id=sentiment_id, sentiment=sentiment)
                     sentence.sentimentData = sentiment_dto
@@ -306,7 +322,7 @@ def analyze_reviews():
                                 if emotion != 'not-relevant' and value > max_value:
                                     max_value = value
                                     mapped_emotion = map_emotion(emotion)
-                                    sentiment_id = sentence.id + '_s_' + str(index)
+                                    sentiment_id = sentence.id + '_s_' + str(0)
                                     sentiment =  sentence_sentiment["emotion"]
                                     sentiment_dto = SentimentDTO(id=sentiment_id, sentiment=mapped_emotion)
                                     sentence.sentimentData = sentiment_dto
@@ -319,11 +335,11 @@ def analyze_reviews():
                     features = format_features(sentence.text, ner_results)
                     print(features)
                     if len(features) > 0:
-                        feature_id = sentence.id + '_f_' + str(index)
+                        feature_id = sentence.id + '_f_' + str(0)
                         feature = features[0] # TODO discuss if multiple features
                         feature_dto = FeatureDTO(id=feature_id, feature=feature)
                         sentence.featureData = feature_dto
-                    # features_with_id.append({'id': sentence['id'], 'features': features})  
+                    # features_with_id.append({'id': sentence['id'], 'features': features})
             analyzed_reviews.append(review_dto.to_dict())
         return make_response(analyzed_reviews, 200)
     except Exception as e:

@@ -326,19 +326,19 @@ def analyze_reviews():
                                     sentiment =  sentence_sentiment["emotion"]
                                     sentiment_dto = SentimentDTO(id=sentiment_id, sentiment=mapped_emotion)
                                     sentence.sentimentData = sentiment_dto
+                feature_id = sentence.id + '_f_' + str(0)
+                features = []
                 if feature_model != '' and feature_model == "transfeatex":
                     api_feature_extraction = FeatureExtractionService()
-                    features_with_id = api_feature_extraction.extract_features(sentence.text)
+                    features = api_feature_extraction.extract_features(sentence.text)
                 elif feature_model != '' and feature_model in expected_feature_models:
                     classifier = pipeline("ner", model="quim-motger/" + feature_model)
                     ner_results = classifier(sentence.text)
                     features = format_features(sentence.text, ner_results)
-                    print(features)
-                    if len(features) > 0:
-                        feature_id = sentence.id + '_f_' + str(0)
-                        feature = features[0] # TODO discuss if multiple features
-                        feature_dto = FeatureDTO(id=feature_id, feature=feature)
-                        sentence.featureData = feature_dto
+                if len(features) > 0:
+                    feature = features[0] # TODO discuss if multiple features
+                    feature_dto = FeatureDTO(id=feature_id, feature=feature)
+                    sentence.featureData = feature_dto
                     # features_with_id.append({'id': sentence['id'], 'features': features})
             analyzed_reviews.append(review_dto.to_dict())
         return make_response(analyzed_reviews, 200)

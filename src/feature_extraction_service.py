@@ -2,7 +2,7 @@ import requests
 
 class FeatureExtractionService:
     def __init__(self):
-        self.extract_features_endpoint = 'http://127.0.0.1:5000/extract-features'
+        self.extract_features_endpoint = 'http://127.0.0.1:3002/extract-features-aux'
 
     def extract_features(self, text):
         try:

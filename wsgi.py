@@ -31,7 +31,7 @@ class SentimentDTO:
         }
 
 class SentenceDTO:
-    def __init__(self, id: str, sentimentData: List[SentimentDTO], featureData: list[FeatureDTO], text: str = None):
+    def __init__(self, id: str, sentimentData: SentimentDTO, featureData: FeatureDTO, text: str = None):
         self.id = id
         self.sentimentData = sentimentData
         self.featureData = featureData
@@ -44,7 +44,7 @@ class SentenceDTO:
             "featureData": self.featureData.to_dict() if self.featureData is not None else None,
             "text": self.text
         }
-
+    
 class ReviewResponseDTO:
     def __init__(self, id: str, applicationId:str, review: str, sentences: List[SentenceDTO]):
         self.reviewId = id
@@ -301,19 +301,20 @@ def analyze_reviews():
             review_dto = ReviewResponseDTO(id=id, applicationId=app_identifier, review=body, sentences=sentences)
 
             for index, sentence in enumerate(review_dto.sentences):
-                if sentiment_model != '' and sentiment_model == "GPT-3.5":
+                if sentence.text is not None and sentiment_model != '' and sentiment_model == "GPT-3.5":
                     emotion_extraction_handler = EmotionExtractionService()
                     sentence_sentiment = emotion_extraction_handler.emotion_extraction_aux(sentence.text)
-                    sentiment_id = sentence.id + '_s_' + str(0) # in a future we may add a list
-                    sentiment =  sentence_sentiment["emotion"]
-                    sentiment_dto = SentimentDTO(id=sentiment_id, sentiment=sentiment)
-                    sentence.sentimentData = sentiment_dto
-                elif sentiment_model != '' and sentiment_model in expected_sentiment_models:
+                    if sentence_sentiment is not None:
+                        sentiment_id = sentence.id + '_s_' + str(0) # in a future we may add a list
+                        sentiment =  sentence_sentiment["emotion"]
+                        sentiment_dto = SentimentDTO(id=sentiment_id, sentiment=sentiment)
+                        sentence.sentimentData = sentiment_dto
+                elif sentence.text is not None and sentiment_model != '' and sentiment_model in expected_sentiment_models:
                     api_sentiment_analysis = SentimentAnalysisService()
                     emotions = api_sentiment_analysis.get_emotions(sentiment_model, sentence.text)
                     if emotions is None:
                         return "Error in sentiment analysis request", 500
-                    else:
+                    elif 'emotions' in emotions:
                         max_emotion = max(emotions['emotions'], key=emotions['emotions'].get)
                         mapped_emotion = map_emotion(max_emotion)
                         if mapped_emotion == 'Not relevant':
@@ -322,21 +323,20 @@ def analyze_reviews():
                                 if emotion != 'not-relevant' and value > max_value:
                                     max_value = value
                                     mapped_emotion = map_emotion(emotion)
-                                    sentiment_id = sentence.id + '_s_' + str(0)
-                                    sentiment =  sentence_sentiment["emotion"]
-                                    sentiment_dto = SentimentDTO(id=sentiment_id, sentiment=mapped_emotion)
-                                    sentence.sentimentData = sentiment_dto
-                feature_id = sentence.id + '_f_' + str(0)
+                        sentiment_id = sentence.id + '_s_' + str(0)
+                        sentiment_dto = SentimentDTO(id=sentiment_id, sentiment=mapped_emotion)
+                        sentence.sentimentData = sentiment_dto
                 features = []
-                if feature_model != '' and feature_model == "transfeatex":
+                if sentence.text is not None and feature_model != '' and feature_model == "transfeatex":
                     api_feature_extraction = FeatureExtractionService()
                     features = api_feature_extraction.extract_features(sentence.text)
-                elif feature_model != '' and feature_model in expected_feature_models:
+                elif sentence.text is not None and feature_model != '' and feature_model in expected_feature_models:
                     classifier = pipeline("ner", model="quim-motger/" + feature_model)
                     ner_results = classifier(sentence.text)
                     features = format_features(sentence.text, ner_results)
-                if len(features) > 0:
+                if features is not None and len(features) > 0:
                     feature = features[0] # TODO discuss if multiple features
+                    feature_id = sentence.id + '_f_' + str(0)
                     feature_dto = FeatureDTO(id=feature_id, feature=feature)
                     sentence.featureData = feature_dto
                     # features_with_id.append({'id': sentence['id'], 'features': features})

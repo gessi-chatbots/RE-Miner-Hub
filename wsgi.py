@@ -7,6 +7,7 @@ from src.emotion_extraction_service import EmotionExtractionService
 from src.feature_extraction_service import FeatureExtractionService
 from src.sentiment_analysis_service import SentimentAnalysisService
 from typing import List
+import logging
 
 class FeatureDTO:
     def __init__(self, id: str, feature: str):
@@ -59,6 +60,8 @@ class ReviewResponseDTO:
             "review": self.review,
             "sentences": [sentence.to_dict() for sentence in self.sentences]
         }
+    
+logging.basicConfig(level=logging.DEBUG)
 
 def format_features(text, ner_results):
     features = []
@@ -273,8 +276,15 @@ def analyze_reviews():
         reviews = request.get_json()
         
         if reviews is None:
-            return make_response(jsonify({'message': 'no reviews submitted for analysis'}), 400)        
-        reviews_dict = json.loads(reviews)
+            return make_response(jsonify({'message': 'no reviews submitted for analysis'}), 400)
+        if isinstance(reviews, str):
+            try:
+                reviews_dict = json.loads(reviews)
+            except json.decoder.JSONDecodeError:
+                raise Exception("Error in decoding request")
+                reviews_dict = {}
+        else:
+            reviews_dict = reviews
 
 
         analyzed_reviews = []
@@ -328,9 +338,12 @@ def analyze_reviews():
                         sentence.sentimentData = sentiment_dto
                 features = []
                 if sentence.text is not None and feature_model != '' and feature_model == "transfeatex":
+                    logging.debug("Using transfeatex for feature extraction")
+
                     api_feature_extraction = FeatureExtractionService()
                     features = api_feature_extraction.extract_features(sentence.text)
                 elif sentence.text is not None and feature_model != '' and feature_model in expected_feature_models:
+                    logging.debug(f"Using model {feature_model} for NER")
                     classifier = pipeline("ner", model="quim-motger/" + feature_model)
                     ner_results = classifier(sentence.text)
                     features = format_features(sentence.text, ner_results)
@@ -343,6 +356,7 @@ def analyze_reviews():
             analyzed_reviews.append(review_dto.to_dict())
         return make_response(analyzed_reviews, 200)
     except Exception as e:
+        logging.error(f"An error occurred: {e}")
         return f"An error occurred: {e}", 500
     
 @app.route('/analyze-reviews', methods=['POST'])

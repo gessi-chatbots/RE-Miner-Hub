@@ -1,8 +1,9 @@
 import requests
+import os
 
 class FeatureExtractionService:
     def __init__(self):
-        self.extract_features_endpoint = 'http://127.0.0.1:3002/extract-features-aux'
+        self.extract_features_endpoint = os.environ.get('TRANSFEATEX_URL', 'http://127.0.0.1:3002') + '/extract-features-aux'
 
     def extract_features(self, text):
         try:

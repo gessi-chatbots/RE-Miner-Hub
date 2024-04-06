@@ -16,3 +16,5 @@ COPY . /wsgi
 EXPOSE 3002
 
 CMD ["pipenv", "run", "flask", "run", "--host=0.0.0.0", "--port=3002"]
+
+ENV PATH="/wsgi/.venv/bin:$PATH"

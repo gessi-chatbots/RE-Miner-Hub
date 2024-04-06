@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-openai = "*"
+openai = "==1.3.3"
 python-dotenv = "*"
 requests = "*"
 jsonlines = "*"

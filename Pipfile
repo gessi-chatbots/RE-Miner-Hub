@@ -14,7 +14,7 @@ seaborn = "*"
 flask = "*"
 flask-cors = "*"
 flask-swagger-ui = "*"
-transformers = "*"
+transformers==4.30.2
 [dev-packages]
 
 [requires]

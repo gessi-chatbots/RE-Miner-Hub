@@ -29,6 +29,13 @@ RE-Miner-Hub offers two main services, which are materialized as differentiated 
   pip install -r requirements.txt
 ```
 
+## How to deploy
+1. 
+    `docker build -t re_miner_hub:latest .`
+2. 
+    `docker run -d --name RE_Miner_HUB -p 3002:3002 re_miner_hub:latest`
+
+
 ## How to Use
 
 1. Run the main script to start the RE-Miner-Hub server

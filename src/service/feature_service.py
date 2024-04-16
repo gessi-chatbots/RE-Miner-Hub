@@ -1,8 +1,7 @@
 import os
 import logging
 import requests
-from exceptions.transfeatex_exception import TransfeatExException
-from exceptions.request_exception import RequestException
+from exceptions.api_exceptions import TransfeatExException, RequestException
 class FeatureService:
     def __init__ (self):
         self.transfeatex_endpoint = os.environ.get('TRANSFEATEX_URL', 'http://127.0.0.1:3004') + '/extract-features-aux'

@@ -7,22 +7,19 @@ from src.emotion_extraction_service import EmotionExtractionService
 from src.feature_extraction_service import FeatureExtractionService
 from src.sentiment_analysis_service import SentimentAnalysisService
 from dto import FeatureDTO, SentimentDTO, SentenceDTO, ReviewResponseDTO
+from service.feature_service import FeatureService
+from exceptions import api_exceptions
 from service.emotion_service import map_emotion
 import logging
-
-
-logging.basicConfig(level=logging.DEBUG)
-
-
 
 app = Flask(__name__)
 CORS(app)
 
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 @app.route('/swagger.yaml')
 def swagger_yaml():
     return send_file('swagger.yaml')
-
 
 # Flask Swagger configs
 SWAGGER_URL = '/swagger'
@@ -35,6 +32,14 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
     }
 )
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+
+@app.handle_exception(api_exceptions.TransfeatExException)
+def handle_transfeatex_exception(exception):
+    return make_response(jsonify({'message': exception.message}), exception.code)
+
+@app.handle_exception(api_exceptions.RequestException)
+def handle_request_exception(exception):
+    return make_response(jsonify({'message': exception.message}), exception.code)
 
 
 @app.route('/analyze', methods=['POST'])
@@ -66,7 +71,6 @@ def analyze_reviews():
                 reviews_dict = json.loads(reviews)
             except json.decoder.JSONDecodeError:
                 raise Exception("Error in decoding request")
-                reviews_dict = {}
         else:
             reviews_dict = reviews
 
@@ -126,7 +130,8 @@ def analyze_reviews():
                     logging.debug(f"Using model {feature_model} for NER")
                     classifier = pipeline("ner", model="quim-motger/" + feature_model)
                     ner_results = classifier(sentence.text)
-                    features = format_features(sentence.text, ner_results)
+                    feature_service = FeatureService()
+                    features = feature_service.format_features(sentence.text, ner_results)
                 if features is not None and len(features) > 0:
                     feature = features[0] # TODO discuss if multiple features
                     feature_dto = FeatureDTO(feature=feature)
@@ -137,98 +142,6 @@ def analyze_reviews():
     except Exception as e:
         logging.error(f"An error occurred: {e}")
         return f"An error occurred: {e}", 500
-    
-@app.route('/analyze-reviews', methods=['POST'])
-@DeprecationWarning
-def analyze():
-    try:
-        if not request.args \
-                or ('model_emotion' not in request.args.keys() and 'model_features' not in request.args.keys()) \
-                and 'text' not in request.json.keys():
-            return "Lacking model and textual data in proper tag.", 400
-        if 'model_emotion' not in request.args.keys() and 'model_features' not in request.args.keys():
-            return "Lacking model in proper tag.", 400
-        if 'text' not in request.json.keys():
-            return "Lacking textual data in proper tag.", 400
-        print("Request received")
-        model_emotion = request.args.get("model_emotion", None)
-        model_features = request.args.get("model_features", None)
-        data = request.get_json()
-        texts = data.get("text")
-        other_models_emotion = ["BERT", "BETO"]
-        other_models_features = ["t-frex-bert-base-uncased", "t-frex-bert-large-uncased", "t-frex-roberta-base",
-                                 "t-frex-roberta-large", "t-frex-xlnet-base-cased", "t-frex-xlnet-large-cased"]
-        results = {}
-        for text in texts:
-            id_text = text['id']
-            results[id_text] = {
-                "text": {
-                    'text': text['text'],
-                    "emotions": [],
-                    "features": []
-                }
-            }
-        features_with_id = []
-
-
-        if model_emotion != '' and model_emotion == "GPT-3.5":
-            emotion_extraction_handler = EmotionExtractionService()
-            reviews_with_emotion = emotion_extraction_handler.emotion_extraction(texts)
-            for review in reviews_with_emotion:
-                id_text = review['text']['id']
-                results[id_text]['text']['text'] = review['text']['text']
-                results[id_text]['text']['emotions'].append(review['emotion'])
-        elif model_emotion != '' and model_emotion in other_models_emotion:
-            api_sentiment_analysis = SentimentAnalysisService()
-            for message in texts:
-                emotions = api_sentiment_analysis.get_emotions(model_emotion, message['text'])
-                if emotions is None:
-                    return "Error in sentiment analysis request", 500
-                else:
-                    max_emotion = max(emotions['emotions'], key=emotions['emotions'].get)
-                    results[id_text]['text']['text'] = message
-                    mapped_emotion = map_emotion(max_emotion)
-                    if mapped_emotion == 'Not relevant':
-                        max_value = 0
-                        for emotion, value in emotions['emotions'].items():
-                            if emotion != 'not-relevant' and value > max_value:
-                                max_value = value
-                                mapped_emotion = map_emotion(emotion)
-                    results[id_text]['text']['emotions'].append(mapped_emotion)
-        if model_features != '' and model_features == "transfeatex":
-            api_feature_extraction = FeatureExtractionService()
-            features_with_id = api_feature_extraction.extract_features(texts)
-        elif model_features != '' and model_features in other_models_features:
-            for message in texts:
-                classifier = pipeline("ner", model="quim-motger/" + model_features)
-                ner_results = classifier(message['text'])
-                features = format_features(message['text'], ner_results)
-                features_with_id.append({'id': message['id'], 'features': features})
-
-
-        for review in features_with_id:
-            id_text = review['id']
-            if id_text in results:
-                features_to_append = review.get('features', [])
-                if isinstance(features_to_append, list):
-                    if 'text' in results[id_text]:
-                        for feature_to_append in features_to_append:
-                            results[id_text]['text']['features'].append(feature_to_append)
-                    else:
-                        print(f"Invalid structure for id_text {id_text}. 'text' or 'features' key missing.")
-                else:
-                    print(
-                        f"Invalid 'features' type for id_text {id_text}. Expected list, got {type(features_to_append)}.")
-            else:
-                print(f"Id_text {id_text} not found in results.")
-
-        results = list(results.values())
-        print(f"Feature Model: {model_features}, Sentiment Model: {model_emotion}Result: {results}")
-        return jsonify(results)
-
-    except Exception as e:
-        return f"An error occurred: {e}", 500
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3000)

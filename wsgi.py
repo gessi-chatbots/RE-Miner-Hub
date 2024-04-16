@@ -2,9 +2,9 @@ import json
 from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
-from service.analysis_service import AnalysisService
-from exceptions import api_exceptions
-from utils import extractReviewDTOsFromJson
+from src.service.analysis_service import AnalysisService
+from src.exceptions import api_exceptions
+from src.utils import extractReviewDTOsFromJson
 import logging
 
 #---------------------------------------------------------------------------
@@ -39,15 +39,15 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 #---------------------------------------------------------------------------
 #   Exception Handlers
 #---------------------------------------------------------------------------
-@app.handle_exception(api_exceptions.TransfeatExException)
+@app.errorhandler(api_exceptions.TransfeatExException)
 def handle_transfeatex_exception(exception):
     return make_response(jsonify({'message': exception.message}), exception.code)
 
-@app.handle_exception(api_exceptions.RequestException)
-def handle_request_exception(exception):
+@app.errorhandler(api_exceptions.RequestFormatException)
+def handle_request_format_exception(exception):
     return make_response(jsonify({'message': exception.message}), exception.code)
 
-@app.handle_exception(api_exceptions.RequestException)
+@app.errorhandler(api_exceptions.RequestException)
 def handle_request_exception(exception):
     return make_response(jsonify({'message': exception.message}), exception.code)
 

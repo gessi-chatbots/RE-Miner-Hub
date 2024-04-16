@@ -3,7 +3,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
-from dto import SentimentDTO
+from src.dto import SentimentDTO
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))

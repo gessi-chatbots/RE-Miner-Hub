@@ -1,5 +1,5 @@
-from dto.FeatureDTO import FeatureDTO
-from dto.SentimentDTO import SentimentDTO
+from src.dto.FeatureDTO import FeatureDTO
+from src.dto.SentimentDTO import SentimentDTO
 
 class SentenceDTO:
     def __init__(self, id: str, sentimentData: SentimentDTO, featureData: FeatureDTO, text: str = None):

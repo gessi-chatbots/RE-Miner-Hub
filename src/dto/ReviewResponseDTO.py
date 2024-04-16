@@ -1,5 +1,5 @@
 from typing import List
-from dto.SentenceDTO import SentenceDTO
+from src.dto.SentenceDTO import SentenceDTO
 
 class ReviewResponseDTO:
     def __init__(self, id: str, review: str, sentences: List[SentenceDTO]):

@@ -1,9 +1,9 @@
 import os
 import logging
 import requests
-from exceptions.api_exceptions import TransfeatExException, RequestException
+from src.exceptions.api_exceptions import TransfeatExException, RequestException
 from transformers import pipeline
-from dto import FeatureDTO
+from src.dto import FeatureDTO
 
 class FeatureService:
     def __init__ (self):

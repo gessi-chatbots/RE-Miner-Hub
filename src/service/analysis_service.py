@@ -1,7 +1,7 @@
 import logging
-from service.emotion_service import EmotionService
-from service.feature_service import FeatureService
-from dto import SentenceDTO
+from src.service.emotion_service import EmotionService
+from src.service.feature_service import FeatureService
+from src.dto import SentenceDTO
 class AnalysisService():
     def __init__(self) -> None:
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)

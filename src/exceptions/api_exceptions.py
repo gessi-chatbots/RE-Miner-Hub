@@ -1,11 +1,11 @@
 class TransfeatExException(Exception):
-    def __init__(self, message: str = "There was an error in TransfeatEx", code: int = 400) -> None:
-        super().__init__(message, code)
+    code = 500
+    message = "There was an error in TransfeatEx"
 
 class RequestException(Exception):
-    def __init__(self, message: str = "There was a request error", code: int = 500) -> None:
-        super().__init__(message, code)
+    code = 500
+    message = "There was a request error"
 
 class RequestFormatException(Exception):
-    def __init__(self, message: str ="Wrong request format", code: int = 400) -> None:
-        super().__init__(message, code)
+    code = 500
+    message = "Wrong request format"

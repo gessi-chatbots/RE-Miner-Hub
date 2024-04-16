@@ -3,7 +3,7 @@ import logging
 import requests
 from src.exceptions.api_exceptions import TransfeatExException, RequestException
 from transformers import pipeline
-from src.dto import FeatureDTO
+from src.dto.FeatureDTO import FeatureDTO
 
 class FeatureService:
     def __init__ (self):
@@ -27,7 +27,7 @@ class FeatureService:
     def analyze_sentence_with_tfrex(self, t_frex_model, sentence):
         logging.debug(f"Using model {t_frex_model} for NER")
         classifier = pipeline("ner", model="quim-motger/" + t_frex_model)
-        ner_results = classifier(sentence.text)
+        ner_results = classifier(sentence)
         feature_service = FeatureService()
         return feature_service.format_features(sentence, ner_results)
 
@@ -39,12 +39,10 @@ class FeatureService:
         else:
             features = self.analyze_sentence_with_tfrex(feature_model, sentence)
         if features is not None and len(features) > 0:
-            feature = features[0]  # TODO discuss if multiple features
-            feature_dto = FeatureDTO(feature=feature)
-            sentence.featureData = feature_dto
-            # features_with_id.append({'id': sentence['id'], 'features': features})
+            feature = features[0]
+            return FeatureDTO(feature=feature)
 
-    def format_features(text, ner_results):
+    def format_features(self, text, ner_results):
         features = []
         current_feature = ""
         logging.info(f"Formatting features: {ner_results}")

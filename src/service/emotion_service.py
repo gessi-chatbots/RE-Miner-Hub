@@ -3,7 +3,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
-from src.dto import SentimentDTO
+from src.dto.SentimentDTO import SentimentDTO
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -58,8 +58,8 @@ class EmotionService():
     def extract_emotion_form_sentence(self, sentiment_model, sentence):
         logging.info(f"Extracting emotions with sentiment model: {sentiment_model} for sentence: {sentence}")
         if sentiment_model == 'GPT-3.5':
-            analyzed_gpt_sentence = self.analyze_sentence_with_gpt(sentence)
-            sentiment_dto = SentimentDTO(analyzed_gpt_sentence['emotion'])
+            detected_emotion = self.analyze_sentence_with_gpt(sentence)
+            sentiment_dto = SentimentDTO(detected_emotion.get('emotion'))
         else: 
             analyzed_bert_beto_sentence = self.analyze_sentence_with_BERT_BETO(sentiment_model, sentence)
             if analyzed_bert_beto_sentence is None:

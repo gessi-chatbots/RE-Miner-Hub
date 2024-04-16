@@ -88,11 +88,11 @@ def validate_and_extract_dto_from_request_body(request_body):
 @app.route('/analyze', methods=['POST'])
 def analyze():
     validate_request_args(request.args)
-    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json)
+    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
     analysis_service = AnalysisService()
     analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
                                                        feature_model= request.args.get("feature_model"), 
-                                                       review_dto_list= review_dto_list)
+                                                       review_dto_list = review_dto_list)
     return make_response(analyzed_reviews, 200)
 
 if __name__ == "__main__":

@@ -1,4 +1,7 @@
-from src.dto import SentenceDTO, SentimentDTO, FeatureDTO, ReviewResponseDTO
+from src.dto.SentenceDTO import SentenceDTO
+from src.dto.SentimentDTO import SentimentDTO
+from src.dto.FeatureDTO import FeatureDTO
+from src.dto.ReviewResponseDTO import ReviewResponseDTO
 
 def extractReviewDTOsFromJson(reviews_dict):
     review_dto_list = []
@@ -23,4 +26,4 @@ def extractReviewDTOsFromJson(reviews_dict):
                 sentences.append(sentence)
         review_dto = ReviewResponseDTO(id=id, review=body, sentences=sentences)
         review_dto_list.append(review_dto)
-        
+    return review_dto_list

@@ -15,14 +15,15 @@ class AnalysisService():
         feature_service = FeatureService()
         feature = feature_service.extract_feature_from_sentence(feature_model, sentence.text)
         sentence.featureData = feature
-        
+
     def analyze_review_sentences(self, sentiment_model, feature_model, review):
         for index, sentence in enumerate(review.sentences):
-            if sentiment_model is not None:
-                self.analyze_sentence_sentiments(sentiment_model, sentence)
-            if feature_model is not None:
-                self.analyze_sentence_features(feature_model, sentence)
-            
+            if sentence.text is not None:
+                if sentiment_model is not None:
+                    self.analyze_sentence_sentiments(sentiment_model, sentence)
+                if feature_model is not None:
+                    self.analyze_sentence_features(feature_model, sentence)
+                
     def analyze_reviews(self, sentiment_model, feature_model, review_dto_list):
         analyzed_reviews = []
         for review_dto in review_dto_list:

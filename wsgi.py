@@ -4,8 +4,9 @@ from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 from src.service.analysis_service import AnalysisService
 from src.exceptions import api_exceptions
-from src.utils import extractReviewDTOsFromJson
+from src.utils import extractReviewDTOsFromJson, extract_reviews_from_json_new_version
 import logging
+import time
 
 #---------------------------------------------------------------------------
 #   Application configs
@@ -16,7 +17,7 @@ CORS(app)
 #---------------------------------------------------------------------------
 #   Logging configs
 #---------------------------------------------------------------------------
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 #---------------------------------------------------------------------------
 #   Flask Swagger configs
@@ -71,28 +72,93 @@ def validate_request_args(request_args):
     if request.args.get("feature_model") is not None and request.args.get("feature_model") not in EXPECTED_FEATURE_MODELS:
         raise api_exceptions.RequestFormatException("Unknown feature model", 400)
 
-def validate_and_extract_dto_from_request_body(request_body):
+def validate_and_extract_dto_from_request_body(request_body, version):
     if request_body is None:
         raise api_exceptions.RequestFormatException("No reviews submitted for analysis", 400)
  
     if isinstance(request_body, str):
         try:
-            reviews_json = json.loads(request_body)
+            json = json.loads(request_body)
         except json.decoder.JSONDecodeError:
             raise api_exceptions.RequestFormatException("Error in decoding request", 400)
     else:
-        reviews_json = request_body
+        json = request_body
+    if version is None or version != "v0":
+        return extractReviewDTOsFromJson(reviews_dict=json)
+    else:
+        return extract_reviews_from_json_new_version(sentences_dict=json)
 
-    return extractReviewDTOsFromJson(reviews_json)
 
-@app.route('/analyze', methods=['POST'])
+@app.route('/analyze/v0', methods=['POST'])
 def analyze():
+    logging.info("Analyze request")
+    starting_time = time.time()
     validate_request_args(request.args)
     review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
     analysis_service = AnalysisService()
     analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
                                                        feature_model= request.args.get("feature_model"), 
                                                        review_dto_list = review_dto_list)
+    end_time = time.time()
+    logging.info(f"Execution time {end_time - starting_time}")
+    return make_response(analyzed_reviews, 200)
+
+@app.route('/analyze/v1', methods=['POST'])
+def analyze():
+    logging.info("Analyze request")
+    starting_time = time.time()
+    validate_request_args(request.args)
+    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
+    analysis_service = AnalysisService()
+    analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
+                                                       feature_model= request.args.get("feature_model"), 
+                                                       review_dto_list = review_dto_list)
+    end_time = time.time()
+    logging.info(f"Execution time {end_time - starting_time}")
+    return make_response(analyzed_reviews, 200)
+
+
+@app.route('/analyze/v2', methods=['POST'])
+def analyze():
+    logging.info("Analyze request")
+    starting_time = time.time()
+    validate_request_args(request.args)
+    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
+    analysis_service = AnalysisService()
+    analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
+                                                       feature_model= request.args.get("feature_model"), 
+                                                       review_dto_list = review_dto_list)
+    end_time = time.time()
+    logging.info(f"Execution time {end_time - starting_time}")
+    return make_response(analyzed_reviews, 200)
+
+
+@app.route('/analyze/v3', methods=['POST'])
+def analyze():
+    logging.info("Analyze request")
+    starting_time = time.time()
+    validate_request_args(request.args)
+    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
+    analysis_service = AnalysisService()
+    analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
+                                                       feature_model= request.args.get("feature_model"), 
+                                                       review_dto_list = review_dto_list)
+    end_time = time.time()
+    logging.info(f"Execution time {end_time - starting_time}")
+    return make_response(analyzed_reviews, 200)
+
+@app.route('/analyze/v4', methods=['POST'])
+def analyze():
+    logging.info("Analyze request")
+    starting_time = time.time()
+    validate_request_args(request.args)
+    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
+    analysis_service = AnalysisService()
+    analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
+                                                       feature_model= request.args.get("feature_model"), 
+                                                       review_dto_list = review_dto_list)
+    end_time = time.time()
+    logging.info(f"Execution time {end_time - starting_time}")
     return make_response(analyzed_reviews, 200)
 
 if __name__ == "__main__":

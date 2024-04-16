@@ -2,10 +2,8 @@ import json
 from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
-from transformers import pipeline
 from service.analysis_service import AnalysisService
 from exceptions import api_exceptions
-from service.emotion_service import map_emotion
 from utils import extractReviewDTOsFromJson
 import logging
 
@@ -88,11 +86,11 @@ def validate_and_extract_dto_from_request_body(request_body):
     return extractReviewDTOsFromJson(reviews_json)
 
 @app.route('/analyze', methods=['POST'])
-def analyze_reviews():
+def analyze():
     validate_request_args(request.args)
     review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json)
     analysis_service = AnalysisService()
-    analyzed_reviews = analysis_service.analyzeReviews(sentiment_model = request.args.get("sentiment_model"), 
+    analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
                                                        feature_model= request.args.get("feature_model"), 
                                                        review_dto_list= review_dto_list)
     return make_response(analyzed_reviews, 200)

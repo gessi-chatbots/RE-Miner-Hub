@@ -13,53 +13,6 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-def format_features(text, ner_results):
-    features = []
-    current_feature = ""
-
-    for feature in ner_results:
-        start = feature['start']
-        end = feature['end']
-
-        # Hot fix to get the whole word
-        blank_space = False
-        while start > 0 and not blank_space and not text[start] == ' ':
-            if text[start - 1] != ' ':
-                start -= 1
-            else:
-                blank_space = True
-
-        blank_space = False
-        while end < len(text) - 1 and not blank_space and not text[end] == ' ':
-            if text[end + 1] != ' ':
-                end += 1
-            else:
-                blank_space = True
-
-        f = text[start:end + 1]
-
-        if feature['entity'] == 'B-feature':
-            # If we were processing a feature, it is saved
-            if len(current_feature) > 0:
-                features.append(current_feature.strip().lower())
-                current_feature = ""
-            # current_feature += f + " "
-            current_feature += f
-
-        elif feature['entity'] == 'I-feature':
-            # hot fix to make sure a feature does not have the same word twice
-            if f not in current_feature:
-                current_feature += f + " "
-
-        elif feature['entity'] == 'O':
-            # If we were processing a feature, it is saved
-            if len(current_feature) > 0:
-                features.append(current_feature.strip().lower())
-                current_feature = ""
-
-    if len(current_feature) > 0:
-        features.append(current_feature.strip().lower())
-    return features
 
 
 app = Flask(__name__)

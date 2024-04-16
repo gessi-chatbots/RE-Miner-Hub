@@ -6,54 +6,13 @@ from transformers import pipeline
 from src.emotion_extraction_service import EmotionExtractionService
 from src.feature_extraction_service import FeatureExtractionService
 from src.sentiment_analysis_service import SentimentAnalysisService
-from typing import List
+from dto import FeatureDTO, SentimentDTO, SentenceDTO, ReviewResponseDTO
+
 import logging
 
-class FeatureDTO:
-    def __init__(self, feature: str):
-        self.feature = feature
 
-    def to_dict(self):
-        return {
-            "feature": self.feature,
-        }
 
-class SentimentDTO:
-    def __init__(self, sentiment: str):
-        self.sentiment = sentiment
 
-    def to_dict(self):
-        return {
-            "sentiment": self.sentiment,
-        }
-
-class SentenceDTO:
-    def __init__(self, id: str, sentimentData: SentimentDTO, featureData: FeatureDTO, text: str = None):
-        self.id = id
-        self.sentimentData = sentimentData
-        self.featureData = featureData
-        self.text = text
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "sentimentData": self.sentimentData.to_dict() if self.sentimentData is not None else None,
-            "featureData": self.featureData.to_dict() if self.featureData is not None else None,
-            "text": self.text
-        }
-    
-class ReviewResponseDTO:
-    def __init__(self, id: str, review: str, sentences: List[SentenceDTO]):
-        self.reviewId = id
-        self.review = review
-        self.sentences = sentences
-
-    def to_dict(self):
-        return {
-            "reviewId": self.reviewId,
-            "review": self.review,
-            "sentences": [sentence.to_dict() for sentence in self.sentences]
-        }
     
 logging.basicConfig(level=logging.DEBUG)
 
@@ -349,6 +308,7 @@ def analyze_reviews():
         return f"An error occurred: {e}", 500
     
 @app.route('/analyze-reviews', methods=['POST'])
+@DeprecationWarning
 def analyze():
     try:
         if not request.args \

@@ -11,10 +11,10 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 class EmotionService():
     def __init__(self):
         self.gpt_model = "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8gzGA5Sq"
-        self.bert_beto_headers = {'Content-Type': 'application/json'}
+        self.bert_beto_headers = {'Authorization': os.getenv("AUTHORIZATION_KEY"), 'Content-Type': 'application/json'}
         self.bert_beto_endpoint = os.environ.get('SENTIMENT_ANALYSIS_API_URL', 'http://127.0.0.1:3005') + '/api/emotion'
 
-    def map_emotion(emotion):
+    def map_emotion(self, emotion):
         mapped_emotion = ''
         if emotion == 'angry':
             mapped_emotion = 'anger'
@@ -47,7 +47,7 @@ class EmotionService():
         return result
 
     def analyze_sentence_with_BERT_BETO(self, model, sentence):
-        response = requests.post(self.endpoint, params={'tool': model}, headers=self.headers, json={'text': sentence})
+        response = requests.post(self.bert_beto_endpoint, params={'tool': model}, headers=self.bert_beto_headers, json={'text': sentence})
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 500:

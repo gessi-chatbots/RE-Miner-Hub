@@ -94,7 +94,7 @@ def analyze():
     logging.info("Analyze request")
     starting_time = time.time()
     validate_request_args(request.args)
-    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
+    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json(), version=None)
     analysis_service = AnalysisService()
     analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
                                                        feature_model= request.args.get("feature_model"), 
@@ -104,7 +104,7 @@ def analyze():
     return make_response(analyzed_reviews, 200)
 
 @app.route('/analyze/v1', methods=['POST'])
-def analyze():
+def analyze_v1():
     logging.info("Analyze request")
     starting_time = time.time()
     validate_request_args(request.args)
@@ -119,7 +119,7 @@ def analyze():
 
 
 @app.route('/analyze/v2', methods=['POST'])
-def analyze():
+def analyze_v2():
     logging.info("Analyze request")
     starting_time = time.time()
     validate_request_args(request.args)
@@ -134,7 +134,7 @@ def analyze():
 
 
 @app.route('/analyze/v3', methods=['POST'])
-def analyze():
+def analyze_v3():
     logging.info("Analyze request")
     starting_time = time.time()
     validate_request_args(request.args)
@@ -148,7 +148,7 @@ def analyze():
     return make_response(analyzed_reviews, 200)
 
 @app.route('/analyze/v4', methods=['POST'])
-def analyze():
+def analyze_v4():
     logging.info("Analyze request")
     starting_time = time.time()
     validate_request_args(request.args)

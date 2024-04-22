@@ -56,10 +56,11 @@ class EmotionService():
             raise Exception("Error in sentiment analysis request")
 
     def extract_emotion_form_sentence(self, sentiment_model, sentence):
-        logging.info(f"Extracting emotions with sentiment model: {sentiment_model} for sentence: {sentence}")
+        logging.info(f'Extracting emotions with sentiment model: {sentiment_model} for sentence: "{sentence}"')
         if sentiment_model == 'GPT-3.5':
             detected_emotion = self.analyze_sentence_with_gpt(sentence)
             sentiment_dto = SentimentDTO(detected_emotion.get('emotion'))
+            return sentiment_dto
         else: 
             analyzed_bert_beto_sentence = self.analyze_sentence_with_BERT_BETO(sentiment_model, sentence)
             if analyzed_bert_beto_sentence is None:
@@ -74,4 +75,6 @@ class EmotionService():
                             max_value = value
                             mapped_emotion = self.map_emotion(emotion)
                 sentiment_dto = SentimentDTO(sentiment=mapped_emotion)
-        return sentiment_dto
+                return sentiment_dto
+            else:
+                return None

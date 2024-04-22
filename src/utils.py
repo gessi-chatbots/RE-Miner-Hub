@@ -31,9 +31,9 @@ def extractReviewDTOsFromJson(reviews_dict):
 def extract_reviews_from_json_new_version(sentences_dict):
     review_dto_list = []
     for sentence in sentences_dict:
-        id = review.get('reviewId')
-        body = review.get('review')
-        sentences_json = review.get('sentences')
+        id = sentences_dict.get('reviewId')
+        body = sentences_dict.get('review')
+        sentences_json = sentences_dict.get('sentences')
         sentences = []
         if sentences_json is not None:
             for sentence_json in sentences_json:

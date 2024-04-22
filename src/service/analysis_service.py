@@ -1,4 +1,5 @@
 import logging
+import time
 from src.service.emotion_service import EmotionService
 from src.service.feature_service import FeatureService
 from src.dto import SentenceDTO
@@ -25,6 +26,13 @@ class AnalysisService():
                     self.analyze_sentence_features(feature_model, sentence)
                 
     def analyze_reviews(self, sentiment_model, feature_model, review_dto_list):
+        analyzed_reviews = []
+        for review_dto in review_dto_list:
+            self.analyze_review_sentences(sentiment_model, feature_model, review_dto)
+            analyzed_reviews.append(review_dto.to_dict())
+        return analyzed_reviews
+    
+    def test_performance_analyze_reviews(self, sentiment_model, feature_model, review_dto_list):
         analyzed_reviews = []
         for review_dto in review_dto_list:
             self.analyze_review_sentences(sentiment_model, feature_model, review_dto)

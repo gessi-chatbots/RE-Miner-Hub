@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 from src.service.analysis_service import AnalysisService
+from src.service.performance_service import PerformanceService
 from src.exceptions import api_exceptions
 from src.utils import extractReviewDTOsFromJson, extract_reviews_from_json_new_version
 import logging
@@ -83,25 +84,36 @@ def validate_and_extract_dto_from_request_body(request_body, version):
             raise api_exceptions.RequestFormatException("Error in decoding request", 400)
     else:
         json = request_body
-    if version is None or version != "v0":
+    if version is None or version == "v0":
         return extractReviewDTOsFromJson(reviews_dict=json)
     else:
         return extract_reviews_from_json_new_version(sentences_dict=json)
 
 
+
+@app.route('/analyze/performance', methods=['POST'])
+def test_performance():
+    logging.info("Analyze performance request")
+    validate_request_args(request.args)
+    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json(), version=request.args.get('hub_version'))
+    performance_service = PerformanceService()
+    performance_results = performance_service.test_performance_analysis_reviews(sentiment_model=request.args.get("sentiment_model"), 
+                                                                                      feature_model=request.args.get("feature_model"), 
+                                                                                      review_dto_list=review_dto_list)
+
+    return make_response(performance_results, 200)
+
+
 @app.route('/analyze/v0', methods=['POST'])
 def analyze():
     logging.info("Analyze request")
-    starting_time = time.time()
     validate_request_args(request.args)
     review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json(), version=None)
     analysis_service = AnalysisService()
-    analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
-                                                       feature_model= request.args.get("feature_model"), 
-                                                       review_dto_list = review_dto_list)
-    end_time = time.time()
-    logging.info(f"Execution time {end_time - starting_time}")
-    return make_response(analyzed_reviews, 200)
+    analyzed_reviews = analysis_service.analyze_reviews(sentiment_model=request.args.get("sentiment_model"), 
+                                                       feature_model=request.args.get("feature_model"), 
+                                                       review_dto_list=review_dto_list)
+    return make_response(jsonify({"analyzed_reviews": analyzed_reviews}), 200)
 
 @app.route('/analyze/v1', methods=['POST'])
 def analyze_v1():
@@ -114,7 +126,8 @@ def analyze_v1():
                                                        feature_model= request.args.get("feature_model"), 
                                                        review_dto_list = review_dto_list)
     end_time = time.time()
-    logging.info(f"Execution time {end_time - starting_time}")
+    logging.info(f"Execution time V1 = {end_time - starting_time}s")
+    analyzed_reviews.append({"execution_time": end_time - starting_time})
     return make_response(analyzed_reviews, 200)
 
 

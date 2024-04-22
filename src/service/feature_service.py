@@ -12,7 +12,7 @@ class FeatureService:
 
     def analyze_sentence_with_transfeatex(self, text):
         try:
-            logging.info(f"Sending text: {text} to Transfeatex {self.transfeatex_endpoint}")
+            logging.info(f'Sending text: "{text}" to Transfeatex {self.transfeatex_endpoint}')
             nlp_response = requests.post(self.transfeatex_endpoint, json={'text': text})
             if nlp_response.status_code == 200:
                 logging.info(f"TransfeatEx response ok")

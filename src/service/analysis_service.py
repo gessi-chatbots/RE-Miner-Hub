@@ -26,7 +26,7 @@ def analyze_sentence_features(feature_model, sentence):
 
 class AnalysisService():
     def __init__(self) -> None:
-        logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+        logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
     def analyze_review_sentences(self, sentiment_model, feature_model, sentences):
         for sentence in sentences:

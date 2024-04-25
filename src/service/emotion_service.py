@@ -11,6 +11,7 @@ class EmotionService():
     def __init__(self):
         self.gpt_model = "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8gzGA5Sq"
         self.bert_beto_endpoint = os.environ.get('SENTIMENT_ANALYSIS_API_URL', 'http://127.0.0.1:3005') + '/api/emotion'
+        logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
     def analyze_sentence_with_gpt(self, sentence):
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))

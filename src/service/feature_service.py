@@ -8,7 +8,7 @@ from src.dto.FeatureDTO import FeatureDTO
 class FeatureService:
     def __init__ (self):
         self.transfeatex_endpoint = os.environ.get('TRANSFEATEX_URL', 'http://127.0.0.1:3004') + '/extract-features-aux'
-        logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+        logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
     def analyze_sentence_with_transfeatex(self, text):
         try:

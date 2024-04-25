@@ -6,33 +6,14 @@ from openai import OpenAI
 from src.dto.SentimentDTO import SentimentDTO
 
 load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class EmotionService():
     def __init__(self):
         self.gpt_model = "ft:gpt-3.5-turbo-0613:universitat-polit-cnica-de-catalunya::8gzGA5Sq"
-        self.bert_beto_headers = {'Authorization': os.getenv("AUTHORIZATION_KEY"), 'Content-Type': 'application/json'}
         self.bert_beto_endpoint = os.environ.get('SENTIMENT_ANALYSIS_API_URL', 'http://127.0.0.1:3005') + '/api/emotion'
 
-    def map_emotion(self, emotion):
-        mapped_emotion = ''
-        if emotion == 'angry':
-            mapped_emotion = 'anger'
-        elif emotion == 'happy':
-            mapped_emotion = 'happiness'
-        elif emotion == 'sad':
-            mapped_emotion = 'sadness'
-        elif emotion == 'surprise':
-            mapped_emotion = 'surprise'
-        elif emotion == 'disgust':
-            mapped_emotion = 'disgust'
-        elif emotion == 'not-relevant':
-            mapped_emotion = 'Not relevant'
-        else:
-            mapped_emotion = emotion
-        return mapped_emotion
-
     def analyze_sentence_with_gpt(self, sentence):
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         result = {}
         completion = client.chat.completions.create(
             model=self.gpt_model,
@@ -47,7 +28,8 @@ class EmotionService():
         return result
 
     def analyze_sentence_with_BERT_BETO(self, model, sentence):
-        response = requests.post(self.bert_beto_endpoint, params={'tool': model}, headers=self.bert_beto_headers, json={'text': sentence})
+        headers = {'Authorization': os.getenv("AUTHORIZATION_KEY"), 'Content-Type': 'application/json'}
+        response = requests.post(self.bert_beto_endpoint, params={'tool': model}, headers=headers, json={'text': sentence})
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 500:
@@ -78,3 +60,21 @@ class EmotionService():
                 return sentiment_dto
             else:
                 return None
+
+    def map_emotion(self, emotion):
+        mapped_emotion = ''
+        if emotion == 'angry':
+            mapped_emotion = 'anger'
+        elif emotion == 'happy':
+            mapped_emotion = 'happiness'
+        elif emotion == 'sad':
+            mapped_emotion = 'sadness'
+        elif emotion == 'surprise':
+            mapped_emotion = 'surprise'
+        elif emotion == 'disgust':
+            mapped_emotion = 'disgust'
+        elif emotion == 'not-relevant':
+            mapped_emotion = 'Not relevant'
+        else:
+            mapped_emotion = emotion
+        return mapped_emotion

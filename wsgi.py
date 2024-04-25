@@ -107,7 +107,6 @@ def test_performance():
     performance_results = performance_service.test_performance_analysis_reviews(sentiment_model=request.args.get("sentiment_model"), 
                                                                                       feature_model=request.args.get("feature_model"), 
                                                                                       review_dto_list=review_dto_list)
-
     return make_response(performance_results, 200)
 
 
@@ -127,11 +126,11 @@ def analyze_v1():
     logging.info("Analyze request")
     starting_time = time.time()
     validate_request_args(request.args)
-    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
+    sentences_dto = validate_and_extract_dto_from_request_body(request_body=request.get_json(), version='v1')
     analysis_service = AnalysisService()
-    analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
+    analyzed_reviews = analysis_service.analyze_review_sentences_v1(sentiment_model = request.args.get("sentiment_model"), 
                                                        feature_model= request.args.get("feature_model"), 
-                                                       review_dto_list = review_dto_list)
+                                                       sentences = sentences_dto)
     end_time = time.time()
     logging.info(f"Execution time V1 = {end_time - starting_time}s")
     analyzed_reviews.append({"execution_time": end_time - starting_time})

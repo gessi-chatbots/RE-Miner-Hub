@@ -1,6 +1,6 @@
-import os
 import logging
 import requests
+import os
 from src.exceptions.api_exceptions import TransfeatExException, RequestException
 from transformers import pipeline
 from src.dto.FeatureDTO import FeatureDTO

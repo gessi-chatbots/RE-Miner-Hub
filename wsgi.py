@@ -90,6 +90,13 @@ def validate_and_extract_dto_from_request_body(request_body, version):
         return extract_reviews_from_json_new_version(sentences_dict=json)
 
 
+#---------------------------------------------------------------------------
+#   API health check
+#---------------------------------------------------------------------------
+@app.route('/ping', methods=['GET'])
+def ping():
+    logging.info(f"Ping API") 
+    return make_response(jsonify({'message': 'HUB ok'}), 200)
 
 @app.route('/analyze/performance', methods=['POST'])
 def test_performance():

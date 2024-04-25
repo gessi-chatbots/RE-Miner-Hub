@@ -128,13 +128,12 @@ def analyze_v1():
     validate_request_args(request.args)
     sentences_dto = validate_and_extract_dto_from_request_body(request_body=request.get_json(), version='v1')
     analysis_service = AnalysisService()
-    analyzed_reviews = analysis_service.analyze_review_sentences_v1(sentiment_model = request.args.get("sentiment_model"), 
+    analyzed_review_sentences = analysis_service.analyze_review_sentences_v1(sentiment_model = request.args.get("sentiment_model"), 
                                                        feature_model= request.args.get("feature_model"), 
                                                        sentences = sentences_dto)
     end_time = time.time()
     logging.info(f"Execution time V1 = {end_time - starting_time}s")
-    analyzed_reviews.append({"execution_time": end_time - starting_time})
-    return make_response(analyzed_reviews, 200)
+    return make_response(jsonify(analyzed_review_sentences), 200)
 
 
 @app.route('/analyze/v2', methods=['POST'])

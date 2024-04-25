@@ -39,21 +39,19 @@ class AnalysisService():
     
     def analyze_review_sentences_v1(self, sentiment_model, feature_model, sentences):
         num_processes = 2
-        
         with Pool(processes=num_processes) as pool:
             results = []
             for sentence in sentences:
                 if sentiment_model is not None:
                     sentiment_result = pool.apply_async(analyze_sentiment, args=(sentiment_model, sentence))
                     results.append(sentiment_result)
-                
                 if feature_model is not None:
                     feature_result = pool.apply_async(analyze_feature, args=(feature_model, sentence))
                     results.append(feature_result)
-
             combined_results = [result.get() for result in results]
-
-        return combined_results
+        
+        return [sentence.to_dict() for sentence in combined_results]
+    
     def analyze_reviews(self, sentiment_model, feature_model, review_dto_list):
         analyzed_reviews = []
         for review_dto in review_dto_list:

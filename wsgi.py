@@ -104,9 +104,10 @@ def test_performance():
     validate_request_args(request.args)
     review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json(), version=request.args.get('hub_version'))
     performance_service = PerformanceService()
-    performance_results = performance_service.test_performance_analysis_reviews(sentiment_model=request.args.get("sentiment_model"), 
-                                                                                      feature_model=request.args.get("feature_model"), 
-                                                                                      review_dto_list=review_dto_list)
+    performance_results = performance_service.test_performance_analysis_reviews(version = request.args.get('hub_version'),
+                                                                                sentiment_model=request.args.get("sentiment_model"), 
+                                                                                feature_model=request.args.get("feature_model"), 
+                                                                                review_dto_list=review_dto_list)
     return make_response(performance_results, 200)
 
 

@@ -37,7 +37,7 @@ class AnalysisService():
                     analyze_sentence_features(feature_model, sentence)
         return sentences
     
-    def analyze_review_sentences_v1(self, sentiment_model, feature_model, sentences):
+    def analyze_review_sentences_multiprocess(self, sentiment_model, feature_model, sentences):
         num_processes = 2
         with Pool(processes=num_processes) as pool:
             results = []

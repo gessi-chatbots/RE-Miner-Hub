@@ -129,56 +129,14 @@ def analyze_v1():
     validate_request_args(request.args)
     sentences_dto = validate_and_extract_dto_from_request_body(request_body=request.get_json(), version='v1')
     analysis_service = AnalysisService()
-    analyzed_review_sentences = analysis_service.analyze_review_sentences_v1(sentiment_model = request.args.get("sentiment_model"), 
-                                                       feature_model= request.args.get("feature_model"), 
-                                                       sentences = sentences_dto)
+    analyzed_review_sentences = analysis_service.analyze_review_sentences_multiprocess(
+        sentiment_model = request.args.get("sentiment_model"), 
+        feature_model= request.args.get("feature_model"), 
+        sentences = sentences_dto)
     end_time = time.time()
     logging.info(f"Execution time V1 = {end_time - starting_time}s")
     return make_response(jsonify(analyzed_review_sentences), 200)
 
-
-@app.route('/analyze/v2', methods=['POST'])
-def analyze_v2():
-    logging.info("Analyze request")
-    starting_time = time.time()
-    validate_request_args(request.args)
-    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
-    analysis_service = AnalysisService()
-    analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
-                                                       feature_model= request.args.get("feature_model"), 
-                                                       review_dto_list = review_dto_list)
-    end_time = time.time()
-    logging.info(f"Execution time {end_time - starting_time}")
-    return make_response(analyzed_reviews, 200)
-
-
-@app.route('/analyze/v3', methods=['POST'])
-def analyze_v3():
-    logging.info("Analyze request")
-    starting_time = time.time()
-    validate_request_args(request.args)
-    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
-    analysis_service = AnalysisService()
-    analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
-                                                       feature_model= request.args.get("feature_model"), 
-                                                       review_dto_list = review_dto_list)
-    end_time = time.time()
-    logging.info(f"Execution time {end_time - starting_time}")
-    return make_response(analyzed_reviews, 200)
-
-@app.route('/analyze/v4', methods=['POST'])
-def analyze_v4():
-    logging.info("Analyze request")
-    starting_time = time.time()
-    validate_request_args(request.args)
-    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
-    analysis_service = AnalysisService()
-    analyzed_reviews = analysis_service.analyze_reviews(sentiment_model = request.args.get("sentiment_model"), 
-                                                       feature_model= request.args.get("feature_model"), 
-                                                       review_dto_list = review_dto_list)
-    end_time = time.time()
-    logging.info(f"Execution time {end_time - starting_time}")
-    return make_response(analyzed_reviews, 200)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=3000)

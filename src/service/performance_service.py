@@ -62,18 +62,22 @@ class PerformanceService():
         review_performance_data = []
         num_processes = 2
         with Pool(processes=num_processes) as pool:
-            for sentence in enumerate(sentences):
+            for sentence in sentences:
+                results = []
                 if sentence.text is not None:
                     sentence_performance_data = {'sentence_id': sentence.id}
                     start_sentence_time = time.time()
                     if sentiment_model is not None:
                         result_sentiment_time = pool.apply_async(analyze_sentiment, args=(sentiment_model, sentence))
-                        sentence_performance_data['sentence_sentiment_analysis_time'] = result_sentiment_time
+                        results.append({"Sentiment Analyisis": {"time": result_sentiment_time.get()}})
                     if feature_model is not None:
                         result_feature_time = pool.apply_async(analyze_feature, args=(feature_model, sentence))
-                        sentence_performance_data['sentence_feature_analysis_time'] = result_feature_time
+                        results.append({"Feature Extraction": {"time": result_feature_time.get()}})
                     end_sentence_time = time.time()
+                        
                     sentence_performance_data['sentence_total_analysis_time'] = end_sentence_time - start_sentence_time
+                    sentence_performance_data['sentence_sentiment_analysis_time'] = results['Sentiment Analysis']['time']
+                    sentence_performance_data['sentence_feature_analysis_time'] = results['Feature Extraction']['time']
                     review_performance_data.append(sentence_performance_data)  
         return review_performance_data
     

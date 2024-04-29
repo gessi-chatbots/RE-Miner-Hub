@@ -84,10 +84,9 @@ def validate_and_extract_dto_from_request_body(request_body, version):
             raise api_exceptions.RequestFormatException("Error in decoding request", 400)
     else:
         json = request_body
-    if version is None or version == "v0":
-        return extractReviewDTOsFromJson(reviews_dict=json)
-    else:
-        return extract_reviews_from_json_new_version(sentences_dict=json)
+
+    return extractReviewDTOsFromJson(reviews_dict=json)
+
 
 
 #---------------------------------------------------------------------------
@@ -108,7 +107,7 @@ def test_performance():
                                                                                 sentiment_model=request.args.get("sentiment_model"), 
                                                                                 feature_model=request.args.get("feature_model"), 
                                                                                 review_dto_list=review_dto_list)
-    return make_response(jsonify(performance_results), 200)
+    return make_response(performance_results, 200)
 
 
 @app.route('/analyze/v0', methods=['POST'])

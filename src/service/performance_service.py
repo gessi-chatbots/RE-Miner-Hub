@@ -5,7 +5,6 @@ from src.service.emotion_service import EmotionService
 from src.service.feature_service import FeatureService
 from src.dto import SentenceDTO
 
-
 def analyze_sentiment(sentiment_model, sentence):
     if sentiment_model is not None:
         start_sentiment_time = time.time()
@@ -77,9 +76,9 @@ class PerformanceService():
     def test_performance_analysis_review_sentences(self, version, sentiment_model, feature_model, review):
         review_performance_data = []
         if version == 'v0':
-            review_performance_data = self.performance_v0
+            review_performance_data = self.performance_v0(sentiment_model, feature_model, review)
         elif version == 'v1':
-            review_performance_data = self.performance_v1
+            review_performance_data = self.performance_v1(sentiment_model, feature_model, review)
         return review_performance_data
             
     def test_performance_analysis_reviews(self, version, sentiment_model, feature_model, review_dto_list):

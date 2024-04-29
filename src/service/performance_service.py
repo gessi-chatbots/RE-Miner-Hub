@@ -36,22 +36,26 @@ class PerformanceService():
     def __init__(self) -> None:
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-
     def performance_v0 (self, sentiment_model, feature_model, sentences):
         review_performance_data = []
-        for sentence in enumerate(sentences):
+        for sentence in sentences:
             if sentence.text is not None:
                 sentence_performance_data = {'sentence_id': sentence.id}
                 start_sentence_time = time.time()
                 if sentiment_model is not None:
-                    result_sentiment_time = self.analyze_sentence_sentiments(sentiment_model, sentence)
-                    sentence_performance_data['sentence_sentiment_analysis_time'] = result_sentiment_time
+                    sentiment_start_time = time.time()
+                    analyze_sentence_sentiments(sentiment_model, sentence)
+                    sentiment_end_time = time.time()
+                    sentence_performance_data['sentence_sentiment_analysis_time'] = sentiment_end_time - sentiment_start_time
                 if feature_model is not None:
-                    result_feature_time = self.analyze_sentence_features(feature_model, sentence)
-                    sentence_performance_data['sentence_feature_analysis_time'] = result_feature_time
+                    feature_start_time = time.time()
+                    analyze_sentence_features(feature_model, sentence)
+                    feature_end_time = time.time()
+                    sentence_performance_data['sentence_feature_analysis_time'] = feature_end_time - feature_start_time
                 end_sentence_time = time.time()
                 sentence_performance_data['sentence_total_analysis_time'] = end_sentence_time - start_sentence_time
                 review_performance_data.append(sentence_performance_data)  
+        return review_performance_data
     
 
     def performance_v1 (self, sentiment_model, feature_model, sentences):
@@ -76,9 +80,9 @@ class PerformanceService():
     def test_performance_analysis_review_sentences(self, version, sentiment_model, feature_model, review):
         review_performance_data = []
         if version == 'v0':
-            review_performance_data = self.performance_v0(sentiment_model, feature_model, review)
+            review_performance_data = self.performance_v0(sentiment_model, feature_model, review.sentences)
         elif version == 'v1':
-            review_performance_data = self.performance_v1(sentiment_model, feature_model, review)
+            review_performance_data = self.performance_v1(sentiment_model, feature_model, review.sentences)
         return review_performance_data
             
     def test_performance_analysis_reviews(self, version, sentiment_model, feature_model, review_dto_list):

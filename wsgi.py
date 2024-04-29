@@ -108,7 +108,7 @@ def test_performance():
                                                                                 sentiment_model=request.args.get("sentiment_model"), 
                                                                                 feature_model=request.args.get("feature_model"), 
                                                                                 review_dto_list=review_dto_list)
-    return make_response(performance_results, 200)
+    return make_response(jsonify(performance_results), 200)
 
 
 @app.route('/analyze/v0', methods=['POST'])

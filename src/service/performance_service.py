@@ -70,7 +70,6 @@ class PerformanceService():
                 sentence_start_time = time.time()
                 if sentence.text is not None:
                     sentence_performance_data = {'sentence_id': sentence.id}
-                    
                     if sentiment_model is not None:
                         async_results.append(pool.apply_async(analyze_sentiment, args=(sentiment_model, sentence)))
                     if feature_model is not None:

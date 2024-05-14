@@ -4,6 +4,7 @@ import os
 from src.exceptions.api_exceptions import TransfeatExException, RequestException
 from transformers import pipeline
 from src.dto.FeatureDTO import FeatureDTO
+from src.dto.LanguageModelDTO import LanguageModelDTO
 
 class FeatureService:
     def __init__ (self):
@@ -40,7 +41,7 @@ class FeatureService:
             features = self.analyze_sentence_with_tfrex(feature_model, sentence)
         if features is not None and len(features) > 0:
             feature = features[0]
-            return FeatureDTO(feature=feature)
+            return FeatureDTO(feature=feature, languageModel=LanguageModelDTO(modelName=feature_model))
 
     def format_features(self, text, ner_results):
         features = []

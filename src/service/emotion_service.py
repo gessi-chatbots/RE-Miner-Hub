@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 from src.dto.SentimentDTO import SentimentDTO
+from src.dto.LanguageModelDTO import LanguageModelDTO
 
 load_dotenv()
 
@@ -42,7 +43,7 @@ class EmotionService():
         logging.info(f'Extracting emotions with sentiment model: {sentiment_model} for sentence: "{sentence}"')
         if sentiment_model == 'GPT-3.5':
             detected_emotion = self.analyze_sentence_with_gpt(sentence)
-            sentiment_dto = SentimentDTO(detected_emotion.get('emotion'))
+            sentiment_dto = SentimentDTO(detected_emotion.get('emotion'), languageModel=LanguageModelDTO(modelName=sentiment_model))
             return sentiment_dto
         else: 
             analyzed_bert_beto_sentence = self.analyze_sentence_with_BERT_BETO(sentiment_model, sentence)
@@ -57,7 +58,7 @@ class EmotionService():
                         if emotion != 'not-relevant' and value > max_value:
                             max_value = value
                             mapped_emotion = self.map_emotion(emotion)
-                sentiment_dto = SentimentDTO(sentiment=mapped_emotion)
+                sentiment_dto = SentimentDTO(sentiment=mapped_emotion, languageModel=LanguageModelDTO(modelName=sentiment_model))
                 return sentiment_dto
             else:
                 return None

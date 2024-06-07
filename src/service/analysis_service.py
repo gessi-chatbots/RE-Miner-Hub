@@ -1,4 +1,5 @@
 import logging
+import src.service.review_service as revSv
 from src.service.emotion_service import EmotionService
 from src.service.feature_service import FeatureService
 from src.dto import SentenceDTO
@@ -52,6 +53,15 @@ class AnalysisService():
         
         return [sentence.to_dict() for sentence in combined_results]
     
+    def analyze_reviews_kg(self, feature_model, review_dto_list):
+        analyzed_reviews = []
+        for review_dto in review_dto_list:
+            revSv.add_sentences_to_review(review_dto)
+            analyzed_sentences = self.analyze_review_sentences(None, feature_model, review_dto.sentences)
+            review_dto.sentences = analyzed_sentences
+            analyzed_reviews.append(review_dto.to_dict())
+        return analyzed_reviews
+
     def analyze_reviews(self, sentiment_model, feature_model, review_dto_list):
         analyzed_reviews = []
         for review_dto in review_dto_list:

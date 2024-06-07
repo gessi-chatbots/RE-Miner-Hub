@@ -1,10 +1,10 @@
 import nltk
-from dto import SentenceDTO
+from src.dto.SentenceDTO import SentenceDTO
 
 def add_sentences_to_review(review):
     sentences = split_review(review.review)
     try:
-        if len(review.sentences) > 0:
+        if len(review.sentences) >= 0:
             for index, sentence in enumerate(sentences):
                 review.sentences[index].text = sentence
     except IndexError: # TODO check this bug

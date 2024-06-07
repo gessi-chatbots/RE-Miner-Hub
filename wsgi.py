@@ -121,6 +121,18 @@ def analyze():
                                                        review_dto_list=review_dto_list)
     return make_response(jsonify({"analyzed_reviews": analyzed_reviews}), 200)
 
+@app.route('/analyze/kg', methods=['POST'])
+def analyzeKG():
+    logging.info("Analyze request")
+    validate_request_args(request.args)
+    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json(), version=None)
+    analysis_service = AnalysisService()
+    analyzed_reviews = analysis_service.analyze_reviews_kg( 
+                                                       feature_model=request.args.get("feature_model"), 
+                                                       review_dto_list=review_dto_list)
+    return make_response(jsonify({"analyzed_reviews": analyzed_reviews}), 200)
+
+
 @app.route('/analyze/v1', methods=['POST'])
 def analyze_v1():
     logging.info("Analyze request")

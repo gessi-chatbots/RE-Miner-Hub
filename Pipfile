@@ -15,6 +15,7 @@ flask = "*"
 flask-cors = "*"
 flask-swagger-ui = "*"
 transformers==4.30.2
+nltk = "*"
 [dev-packages]
 
 [requires]

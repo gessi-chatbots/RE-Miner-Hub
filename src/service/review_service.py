@@ -1,6 +1,7 @@
 import nltk
 from src.dto.SentenceDTO import SentenceDTO
 
+nltk.download('punkt')
 
 def add_sentences_to_review(review):
     sentences = split_review(review.review)
@@ -29,5 +30,4 @@ def extend_and_split_review(review):
         review.sentences.append(SentenceDTO(id=sentence_id, featureData=None, sentimentData=None, text=text))
 
 def split_review(review_text):
-    nltk.download('punkt')
     return nltk.sent_tokenize(review_text)

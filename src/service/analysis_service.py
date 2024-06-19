@@ -22,9 +22,15 @@ def analyze_sentence_sentiments(sentiment_model, sentence: SentenceDTO):
 def analyze_sentence_features(feature_model, sentence):
     feature_service = FeatureService()
     feature = feature_service.extract_feature_from_sentence(feature_model, sentence.text)
+    if feature is not None:
+        feature.feature = to_camel_case(feature.feature)
     sentence.featureData = feature
     return sentence
 
+def to_camel_case(sentence):
+    words = sentence.split()
+    camel_case_sentence = ''.join(word.capitalize() for word in words)
+    return camel_case_sentence
 class AnalysisService():
     def __init__(self) -> None:
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)

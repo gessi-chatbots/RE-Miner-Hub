@@ -38,20 +38,21 @@ RE-Miner-Hub offers two main services, which are materialized as differentiated 
 ## How to deploy (new)
 
 ### Step 1: Pull image
-`docker pull mtiessler/kg_repository:latest`
+`docker pull mtiessler/re_miner_hub:latest`
 ### Step 2: Build image
-`docker build -t mtiessler/kg_repository:latest .`
-### Step 3: Create kg_repository.env file
+`docker build -t mtiessler/re_miner_hub:latest .`
+### Step 3: Create hub.env file
 Here go the credentials to access the SPARQL Database. 
 The .env file has to be in the directory where the commands are being run. 
 
 ```
-DB_USERNAME=username
-DB_PASSWORD=password 
+OPENAI_API_KEY= Request it to admin
+SENTIMENT_ANALYSIS_API_URL=http://127.0.0.1:3005
+TRANSFEATEX_URL=http://127.0.0.1:3004
 ```
 
 ### Step 4: Run container
-`docker run -d --env-file kg_repository.env -p 3003:3003 mtiessler/kg_repository:latest`
+`docker run -d --env-file hub.env -p 3002:3002 mtiessler/re_miner_hub:latest`
 
 ## How to Use
 

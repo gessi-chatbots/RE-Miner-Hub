@@ -29,12 +29,29 @@ RE-Miner-Hub offers two main services, which are materialized as differentiated 
   pip install -r requirements.txt
 ```
 
-## How to deploy
+## How to deploy (old)
 1. 
     `docker build -t re_miner_hub:latest .`
 2. 
     `docker run -d --name RE_Miner_HUB -p 3002:3002 re_miner_hub:latest`
 
+## How to deploy (new)
+
+### Step 1: Pull image
+`docker pull mtiessler/kg_repository:latest`
+### Step 2: Build image
+`docker build -t mtiessler/kg_repository:latest .`
+### Step 3: Create kg_repository.env file
+Here go the credentials to access the SPARQL Database. 
+The .env file has to be in the directory where the commands are being run. 
+
+```
+DB_USERNAME=username
+DB_PASSWORD=password 
+```
+
+### Step 4: Run container
+`docker run -d --env-file kg_repository.env -p 3003:3003 mtiessler/kg_repository:latest`
 
 ## How to Use
 

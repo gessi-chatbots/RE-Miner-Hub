@@ -13,3 +13,4 @@ flask
 torch
 sacremoses
 sentencepiece
+nltk

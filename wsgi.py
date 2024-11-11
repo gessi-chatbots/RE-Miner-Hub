@@ -71,8 +71,7 @@ EXPECTED_FEATURE_MODELS = ["transfeatex", "t-frex-bert-base-uncased", "t-frex-be
 
 def validate_request_args(request_args):
     if not request_args \
-            or ('sentiment_model' not in request_args.keys() and 'feature_model' not in request_args.keys()) \
-            and 'text' not in request.json.keys():
+            or ('sentiment_model' not in request_args.keys() and 'feature_model' not in request_args.keys()):
         raise api_exceptions.RequestFormatException("Lacking model and textual data in proper tag.", 400)
     if 'sentiment_model' not in request_args.keys() and 'feature_model' not in request_args.keys():
         raise api_exceptions.RequestFormatException("Lacking model in proper tag.", 400)
@@ -84,21 +83,24 @@ def validate_request_args(request_args):
         raise api_exceptions.RequestFormatException("Unknown feature model", 400)
 
 
-def validate_and_extract_dto_from_request_body(request_body):
-    if request_body is None:
-        raise api_exceptions.RequestFormatException("No reviews submitted for analysis", 400)
 
+def process_request_body(request_body):
     if isinstance(request_body, str):
         try:
-            j = json.loads(request_body)
+            body = json.loads(request_body)
         except json.decoder.JSONDecodeError:
             raise api_exceptions.RequestFormatException("Error in decoding request", 400)
     else:
-        j = request_body
+        body = request_body
 
-    return extractReviewDTOsFromJson(reviews_dict=json)
-
-
+    if isinstance(body, list):
+        try:
+            reviews = body[0]['reviews']
+        except (IndexError, KeyError):
+            raise api_exceptions.RequestFormatException("Error in extracting reviews from list format", 400)
+    else:
+        reviews = body
+    return extractReviewDTOsFromJson(reviews_dict=reviews)
 #---------------------------------------------------------------------------
 #   API health check
 #---------------------------------------------------------------------------
@@ -112,7 +114,7 @@ def ping():
 def test_performance():
     logging.info("Analyze performance request")
     validate_request_args(request.args)
-    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json(),
+    review_dto_list = process_request_body(request_body=request.get_json(),
                                                                  version=request.args.get('hub_version'))
     performance_service = PerformanceService()
     performance_results = performance_service.test_performance_analysis_reviews(
@@ -129,14 +131,12 @@ def analyze():
 
     validate_request_args(request.args)
 
-    multiprocess = request.args.get("multiprocess", "false").lower() == "false"
-    sentiment_model = request.args.get("sentiment_model")
-    feature_model = request.args.get("feature_model")
+    multiprocess = request.args.get("multiprocess", "false").lower() == "true"
+    sentiment_model = request.args.get("sentiment_model", "GPT-3.5")
+    feature_model = request.args.get("feature_model", "transfeatex")
 
-    review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json())
-
+    review_dto_list = process_request_body(request_body=request.get_json())
     analysis_service = AnalysisService()
-
     starting_time = time.time()
     if multiprocess:
         analyzed_reviews = analysis_service.analyze_review_sentences_multiprocess(
@@ -176,7 +176,8 @@ def analyzeKG():
     return make_response(
         jsonify({
             "analyzed_reviews": analyzed_reviews,
-            "extraction_time": extraction_time
+            "extraction_time": extraction_time,
+            "execution_time": (end_time - starting_time)
         }),
         200
     )

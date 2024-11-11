@@ -42,7 +42,8 @@ class FeatureService:
         if features is not None and len(features) > 0:
             feature = features[0]
             return FeatureDTO(feature=feature, languageModel=LanguageModelDTO(modelName=feature_model))
-
+        else:
+            return FeatureDTO(feature="", languageModel=LanguageModelDTO(modelName=feature_model))
     def format_features(self, text, ner_results):
         features = []
         current_feature = ""

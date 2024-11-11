@@ -12,7 +12,8 @@ def analyze_sentiment(sentiment_model, sentence):
 def analyze_feature(feature_model, sentence):
     if feature_model is not None:
         return analyze_sentence_features(feature_model, sentence)
-    
+
+
 def analyze_sentence_sentiments(sentiment_model, sentence: SentenceDTO):
     emotion_service = EmotionService()
     start_time = time.time()
@@ -28,8 +29,8 @@ def analyze_sentence_features(feature_model, sentence):
     feature = feature_service.extract_feature_from_sentence(feature_model, sentence.text)
     end_time = time.time()
     feature.extraction_time = end_time - start_time
-    if feature is not None:
-        feature.feature = to_camel_case(feature.feature)
+    feature.feature = to_camel_case(feature.feature)
+    sentence.featureData = feature
     return sentence
 
 def to_camel_case(sentence):
@@ -48,8 +49,7 @@ class AnalysisService():
                     analyze_sentence_sentiments(sentiment_model, sentence)
                 if feature_model is not None:
                     analyze_sentence_features(feature_model, sentence)
-            end = time.time()
-            sentence.extraction_time = end - start
+            sentence.extraction_time = time.time() - start
         return sentences
     
     def analyze_review_sentences_multiprocess(self, sentiment_model, feature_model, sentences):
@@ -64,9 +64,8 @@ class AnalysisService():
                 if feature_model is not None:
                     feature_result = pool.apply_async(analyze_feature, args=(feature_model, sentence))
                     results.append(feature_result)
-                end = time.time()
             combined_results = [result.get() for result in results]
-            sentence.sentimentData = end - start
+            sentence.extraction_time = time.time() - start
 
         return [sentence.to_dict() for sentence in combined_results]
     

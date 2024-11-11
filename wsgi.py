@@ -125,13 +125,21 @@ def analyze():
 def analyzeKG():
     logging.info("Analyze request")
     validate_request_args(request.args)
+    starting_time = time.time()
     review_dto_list = validate_and_extract_dto_from_request_body(request_body=request.get_json(), version=None)
+    end_time = time.time()
     analysis_service = AnalysisService()
     analyzed_reviews = analysis_service.analyze_reviews_kg( 
                                                        feature_model=request.args.get("feature_model"), 
                                                        review_dto_list=review_dto_list)
-    return make_response(jsonify({"analyzed_reviews": analyzed_reviews}), 200)
-
+    extraction_time = (end_time - starting_time)
+    return make_response(
+        jsonify({
+            "analyzed_reviews": analyzed_reviews,
+            "extraction_time": extraction_time
+        }),
+        200
+    )
 
 @app.route('/analyze/v1', methods=['POST'])
 def analyze_v1():

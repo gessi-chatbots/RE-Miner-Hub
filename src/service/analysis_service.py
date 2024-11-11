@@ -4,6 +4,7 @@ from src.service.emotion_service import EmotionService
 from src.service.feature_service import FeatureService
 from src.dto import SentenceDTO
 from multiprocessing import Pool
+import time
 
 def analyze_sentiment(sentiment_model, sentence):
     if sentiment_model is not None:
@@ -15,16 +16,21 @@ def analyze_feature(feature_model, sentence):
     
 def analyze_sentence_sentiments(sentiment_model, sentence: SentenceDTO):
     emotion_service = EmotionService()
+    start_time = time.time()
     sentiment = emotion_service.extract_emotion_form_sentence(sentiment_model, sentence.text)
+    end_time = time.time()
+    sentiment.extraction_time = end_time - start_time
     sentence.sentimentData = sentiment
     return sentence
 
 def analyze_sentence_features(feature_model, sentence):
     feature_service = FeatureService()
+    start_time = time.time()
     feature = feature_service.extract_feature_from_sentence(feature_model, sentence.text)
+    end_time = time.time()
+    feature.extraction_time = end_time - start_time
     if feature is not None:
         feature.feature = to_camel_case(feature.feature)
-    sentence.featureData = feature
     return sentence
 
 def to_camel_case(sentence):
@@ -37,11 +43,14 @@ class AnalysisService():
 
     def analyze_review_sentences(self, sentiment_model, feature_model, sentences):
         for sentence in sentences:
+            start = time.time()
             if sentence.text is not None:
                 if sentiment_model is not None:
                     analyze_sentence_sentiments(sentiment_model, sentence)
                 if feature_model is not None:
                     analyze_sentence_features(feature_model, sentence)
+            end = time.time()
+            sentence.extraction_time = end - start
         return sentences
     
     def analyze_review_sentences_multiprocess(self, sentiment_model, feature_model, sentences):
@@ -49,21 +58,26 @@ class AnalysisService():
         with Pool(processes=num_processes) as pool:
             results = []
             for sentence in sentences:
+                start = time.time()
                 if sentiment_model is not None:
                     sentiment_result = pool.apply_async(analyze_sentiment, args=(sentiment_model, sentence))
                     results.append(sentiment_result)
                 if feature_model is not None:
                     feature_result = pool.apply_async(analyze_feature, args=(feature_model, sentence))
                     results.append(feature_result)
+                end = time.time()
             combined_results = [result.get() for result in results]
-        
+            sentence.sentimentData = end - start
+
         return [sentence.to_dict() for sentence in combined_results]
     
     def analyze_reviews_kg(self, feature_model, review_dto_list):
         analyzed_reviews = []
         for review_dto in review_dto_list:
             revSv.add_sentences_to_review(review_dto)
-            analyzed_sentences = self.analyze_review_sentences(None, feature_model, review_dto.sentences)
+            analyzed_sentences = self.analyze_review_sentences(None,
+                                                               feature_model,
+                                                               review_dto.sentences)
             review_dto.sentences = analyzed_sentences
             analyzed_reviews.append(review_dto.to_dict())
         return analyzed_reviews

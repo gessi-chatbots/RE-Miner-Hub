@@ -5,7 +5,6 @@ from src.service.feature_service import FeatureService
 from src.dto import SentenceDTO
 from multiprocessing import Pool
 import time
-
 def analyze_sentiment(sentiment_model, sentence):
     if sentiment_model is not None:
         return analyze_sentence_sentiments(sentiment_model, sentence)
@@ -85,9 +84,16 @@ class AnalysisService():
     def analyze_reviews(self, sentiment_model, feature_model, review_dto_list):
         analyzed_reviews = []
         for review_dto in review_dto_list:
-            analyzed_sentences = self.analyze_review_sentences(sentiment_model, feature_model, review_dto.sentences)
+            revSv.check_review_splitting(review_dto)
+
+            analyzed_sentences = self.analyze_review_sentences(
+                sentiment_model,
+                feature_model,
+                review_dto.sentences
+            )
             review_dto.sentences = analyzed_sentences
             analyzed_reviews.append(review_dto.to_dict())
+
         return analyzed_reviews
 
     def test_performance_analyze_reviews(self, sentiment_model, feature_model, review_dto_list):

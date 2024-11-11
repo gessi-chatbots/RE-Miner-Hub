@@ -5,6 +5,7 @@ import seaborn as sns
 from io import StringIO
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
 
+
 class ModelEvaluatorService:
     def __init__(self, GenerativeSentimentAnalysisController, csv_file):
         self.csv_file = csv_file
@@ -27,7 +28,7 @@ class ModelEvaluatorService:
                     "disgust": 5,
                     "not-relevant": 6
                 }
-                
+
                 y_true, y_pred = [], []
                 for row in csv_reader:
                     y_true.append(label_map[row[true_column]])
@@ -39,7 +40,8 @@ class ModelEvaluatorService:
             recall = recall_score(y_true, y_pred, average='weighted')
             f1 = f1_score(y_true, y_pred, average='weighted')
 
-            existing_images = [image for image in os.listdir(self.results_path) if image.startswith(f'confusion_matrix_{temperature}') and image.endswith('.png')]
+            existing_images = [image for image in os.listdir(self.results_path) if
+                               image.startswith(f'confusion_matrix_{temperature}') and image.endswith('.png')]
             next_number = 1 if not existing_images else len(existing_images) + 1
             image_name = f'results/confusion_matrix_{temperature}_{next_number}.png'
 

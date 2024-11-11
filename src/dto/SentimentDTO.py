@@ -1,12 +1,11 @@
 from datetime import timedelta
-
 from src.dto.LanguageModelDTO import LanguageModelDTO
 
-
 class SentimentDTO:
-    def __init__(self, sentiment: str, languageModel: LanguageModelDTO, extraction_time: timedelta):
+    def __init__(self, sentiment: str, languageModel: LanguageModelDTO, extraction_time: timedelta = None):
         self.sentiment = sentiment
         self.languageModel = languageModel
+        self.extraction_time = extraction_time
 
     def to_dict(self):
         return {

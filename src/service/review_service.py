@@ -1,8 +1,7 @@
 import nltk
 from src.dto.SentenceDTO import SentenceDTO
 
-nltk.download('punkt')
-
+nltk.download('punkt_tab')
 
 def add_sentences_to_review(review):
     sentences = split_review(review.review)

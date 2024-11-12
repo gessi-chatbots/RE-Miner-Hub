@@ -132,8 +132,8 @@ def analyze():
     validate_request_args(request.args)
 
     multiprocess = request.args.get("multiprocess", "false").lower() == "true"
-    sentiment_model = request.args.get("sentiment_model", "GPT-3.5")
-    feature_model = request.args.get("feature_model", "transfeatex")
+    sentiment_model = request.args.get("sentiment_model", None)
+    feature_model = request.args.get("feature_model", None)
 
     review_dto_list = process_request_body(request_body=request.get_json())
     analysis_service = AnalysisService()

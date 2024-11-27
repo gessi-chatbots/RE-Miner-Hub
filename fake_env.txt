@@ -1,0 +1,7 @@
+OPENAI_API_KEY=***
+AUTHORIZATION_KEY=***
+# TRANSFEATEX_URL=http://host.docker.internal:3004
+SENTIMENT_ANALYSIS_API_URL=http://127.0.0.1:3005
+# TRANSFEATEX_URL=http://127.0.0.1:3004
+# SENTIMENT_ANALYSIS_API_URL=http://gessi-chatbots.essi.upc.edu:3005
+TRANSFEATEX_URL=http://gessi-chatbots.essi.upc.edu:3004

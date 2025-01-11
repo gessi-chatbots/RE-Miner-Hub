@@ -5,7 +5,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 from src.service.analysis_service import AnalysisService
 from src.service.performance_service import PerformanceService
 from src.exceptions import api_exceptions
-from src.utils import extractReviewDTOsFromJson
+from src.utils import extractReviewDTOsFromJson, extractReviewDTOsFromJsonAux
 import logging
 import time
 
@@ -95,12 +95,21 @@ def process_request_body(request_body):
 
     if isinstance(body, list):
         try:
-            reviews = body[0]['reviews']
+            # Check the shape of the first review to determine which function to use
+            first_review = body[0]
+            if 'applicationId' in first_review and 'date' in first_review:
+                # Use Aux function for this shape
+                return extractReviewDTOsFromJsonAux(reviews_dict=body)
+            elif 'reviewId' in first_review and 'review' in first_review:
+                # Use the main function for this shape
+                return extractReviewDTOsFromJson(reviews_dict=body)
+            else:
+                raise api_exceptions.RequestFormatException("Unexpected review format", 400)
         except (IndexError, KeyError):
             raise api_exceptions.RequestFormatException("Error in extracting reviews from list format", 400)
     else:
-        reviews = body
-    return extractReviewDTOsFromJson(reviews_dict=reviews)
+        raise api_exceptions.RequestFormatException("Unsupported request format", 400)
+
 #---------------------------------------------------------------------------
 #   API health check
 #---------------------------------------------------------------------------
@@ -142,7 +151,7 @@ def analyze():
             return make_response(jsonify({"error": "Invalid sibling_threshold value"}), 400)
 
     review_dto_list = process_request_body(request_body=request.get_json())
-    app_name = request.get_json()[0].get('app_name')
+    app_name = request.get_json()[0].get('applicationId')
     analysis_service = AnalysisService()
     analysis_starting_time = time.time()
 

@@ -131,33 +131,41 @@ def analyze():
 
     validate_request_args(request.args)
 
-    multiprocess = request.args.get("multiprocess", "false").lower() == "true"
     sentiment_model = request.args.get("sentiment_model", None)
     feature_model = request.args.get("feature_model", None)
 
-    review_dto_list = process_request_body(request_body=request.get_json())
-    analysis_service = AnalysisService()
-    starting_time = time.time()
-    if multiprocess:
-        analyzed_reviews = analysis_service.analyze_review_sentences_multiprocess(
-            sentiment_model=sentiment_model,
-            feature_model=feature_model,
-            sentences=review_dto_list
-        )
-    else:
-        analyzed_reviews = analysis_service.analyze_reviews(
-            sentiment_model=sentiment_model,
-            feature_model=feature_model,
-            review_dto_list=review_dto_list
-        )
+    sibling_threshold = request.args.get("sibling_threshold", None)
+    if sibling_threshold is not None:
+        try:
+            sibling_threshold = float(sibling_threshold)
+        except ValueError:
+            return make_response(jsonify({"error": "Invalid sibling_threshold value"}), 400)
 
-    end_time = time.time()
-    logging.info(f"Execution time = {end_time - starting_time}s")
+    review_dto_list = process_request_body(request_body=request.get_json())
+    app_name = request.get_json()[0].get('app_name')
+    analysis_service = AnalysisService()
+    analysis_starting_time = time.time()
+
+    analyzed_reviews = analysis_service.analyze_reviews(
+        sentiment_model=sentiment_model,
+        feature_model=feature_model,
+        review_dto_list=review_dto_list,
+    )
+
+    analysis_ending_time = time.time()
+    logging.info(f"Execution time = {analysis_ending_time - analysis_starting_time}s")
+    clustering_starting_time = time.time()
+
+    analysis_service.clusterize_reviews(app_name, analyzed_reviews, sibling_threshold)
+    clustering_ending_time = time.time()
+    logging.info(f"Clustering time = {clustering_ending_time - clustering_starting_time}s")
+
 
     return make_response(jsonify({
         "analyzed_reviews": analyzed_reviews,
-        "multiprocess": multiprocess,
-        "execution_time": (end_time - starting_time)
+        "execution_time": (analysis_ending_time - analysis_starting_time),
+        "clustering_time": (clustering_ending_time - clustering_starting_time),
+        "sibling_threshold": sibling_threshold
     }), 200)
 
 

@@ -1,10 +1,15 @@
 import logging
+
+import requests
+
 import src.service.review_service as revSv
 from src.service.emotion_service import EmotionService
 from src.service.feature_service import FeatureService
 from src.dto import SentenceDTO
 from multiprocessing import Pool
 import time
+import os
+
 def analyze_sentiment(sentiment_model, sentence):
     if sentiment_model is not None:
         return analyze_sentence_sentiments(sentiment_model, sentence)
@@ -40,6 +45,7 @@ def to_camel_case(sentence):
 class AnalysisService():
     def __init__(self) -> None:
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+        self.dendogram_generator_url = os.environ.get('DENDOGRAM_GENERATOR_URL', 'http://127.0.0.1:3008') + '/generate'
 
     def analyze_review_sentences(self, sentiment_model, feature_model, sentences):
         for sentence in sentences:
@@ -94,6 +100,32 @@ class AnalysisService():
             analyzed_reviews.append(review_dto.to_dict())
 
         return analyzed_reviews
+
+
+    def clusterize_reviews(self, app_name, analyzed_reviews, sibling_threshold):
+        try:
+            params = {'app_name': app_name,
+                      'threshold': sibling_threshold}
+            body = {
+                "analyzed_reviews": analyzed_reviews
+            }
+
+            response = requests.post(
+                self.dendogram_generator_url,
+                params=params,
+                json=body,
+                headers={'Content-Type': 'application/json'}
+            )
+
+            if response.status_code == 200:
+                return response.json()
+            else:
+                raise Exception(
+                    f"Failed to generate dendrogram. Status code: {response.status_code}, Response: {response.content.decode()}"
+                )
+        except Exception as e:
+            print(f"Error during dendrogram generation: {e}")
+            raise
 
     def test_performance_analyze_reviews(self, sentiment_model, feature_model, review_dto_list):
         analyzed_reviews = []

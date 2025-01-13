@@ -18,9 +18,9 @@ class TypeService():
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 500:
-            raise Exception("Error in sentiment analysis request")
+            raise Exception("Error in type analysis request")
         else:
-            raise Exception("Error in sentiment analysis request")
+            raise Exception("Error in type analysis request")
 
     def extract_type_form_sentence(self, type_model, sentence):
         logging.info(f'Extracting type with model: {type_model} for sentence: "{sentence}"')

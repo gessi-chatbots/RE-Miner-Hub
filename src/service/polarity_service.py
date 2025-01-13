@@ -18,9 +18,9 @@ class PolarityService():
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 500:
-            raise Exception("Error in sentiment analysis request")
+            raise Exception("Error in polarity analysis request")
         else:
-            raise Exception("Error in sentiment analysis request")
+            raise Exception("Error in polarity analysis request")
 
     def extract_polarity_form_sentence(self, polarity_model, sentence):
         logging.info(f'Extracting polarity with model: {polarity_model} for sentence: "{sentence}"')

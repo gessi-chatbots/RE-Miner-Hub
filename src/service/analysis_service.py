@@ -5,6 +5,7 @@ from src.service.feature_service import FeatureService
 from src.dto import SentenceDTO
 from multiprocessing import Pool
 import time
+
 def analyze_sentiment(sentiment_model, sentence):
     if sentiment_model is not None:
         return analyze_sentence_sentiments(sentiment_model, sentence)
@@ -33,15 +34,25 @@ def analyze_sentence_features(feature_model, sentence):
     sentence.featureData = feature
     return sentence
 
+def analyze_sentence_polarity(polarity_model, sentence):
+    pass
+
+def analyze_sentence_type(type_model, sentence):
+    pass
+
+def analyze_sentence_topic(topic_model, sentence):
+    pass    
+
 def to_camel_case(sentence):
     words = sentence.split()
     camel_case_sentence = ''.join(word.capitalize() for word in words)
     return camel_case_sentence
+    
 class AnalysisService():
     def __init__(self) -> None:
         logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-    def analyze_review_sentences(self, sentiment_model, feature_model, sentences):
+    def analyze_review_sentences(self, sentiment_model, feature_model, polarity_model, type_model, topic_model, sentences):
         for sentence in sentences:
             start = time.time()
             if sentence.text is not None:
@@ -49,10 +60,16 @@ class AnalysisService():
                     analyze_sentence_sentiments(sentiment_model, sentence)
                 if feature_model is not None:
                     analyze_sentence_features(feature_model, sentence)
+                if polarity_model is not None:
+                    analyze_sentence_polarity(polarity_model, sentence)
+                if type_model is not None:
+                    analyze_sentence_type(type_model, sentence)
+                if topic_model is not None:
+                    analyze_sentence_topic(topic_model, sentence)
             sentence.extraction_time = time.time() - start
         return sentences
     
-    def analyze_review_sentences_multiprocess(self, sentiment_model, feature_model, sentences):
+    def analyze_review_sentences_multiprocess(self, sentiment_model, feature_model, polarity_model, type_model, topic_model, sentences):
         num_processes = 2
         with Pool(processes=num_processes) as pool:
             results = []
@@ -64,6 +81,15 @@ class AnalysisService():
                 if feature_model is not None:
                     feature_result = pool.apply_async(analyze_feature, args=(feature_model, sentence))
                     results.append(feature_result)
+                if polarity_model is not None:
+                    polarity_result = pool.apply_async(analyze_polarity, args=(polarity_model, sentence))
+                    results.append(polarity_result)
+                if type_model is not None:
+                    type_result = pool.apply_async(analyze_type, args=(type_model, sentence))
+                    results.append(type_result)
+                if topic_model is not None:
+                    topic_result = pool.apply_async(analyze_topic, args=(topic_model, sentence))
+                    results.append(topic_result)
             combined_results = [result.get() for result in results]
             sentence.extraction_time = time.time() - start
 
@@ -90,6 +116,7 @@ class AnalysisService():
                 feature_model,
                 review_dto.sentences
             )
+
             review_dto.sentences = analyzed_sentences
             analyzed_reviews.append(review_dto.to_dict())
 

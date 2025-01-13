@@ -67,6 +67,9 @@ EXPECTED_SENTIMENT_MODELS = ["BERT", "BETO", "GPT-3.5"]
 EXPECTED_FEATURE_MODELS = ["transfeatex", "t-frex-bert-base-uncased", "t-frex-bert-large-uncased",
                            "t-frex-roberta-base",
                            "t-frex-roberta-large", "t-frex-xlnet-base-cased", "t-frex-xlnet-large-cased"]
+EXPECTED_POLARITY_MODELS = ["SVM", "MLP"]
+EXPECTED_TYPE_MODELS = ["BERT", "ROBERTA", "DISTILBERT"]
+EXPECTED_TOPIC_MODELS = ["SVM", "MLP"]
 
 
 def validate_request_args(request_args):
@@ -81,6 +84,15 @@ def validate_request_args(request_args):
     if request.args.get("feature_model") is not None and request.args.get(
             "feature_model") not in EXPECTED_FEATURE_MODELS:
         raise api_exceptions.RequestFormatException("Unknown feature model", 400)
+    if request.args.get("polarity_model") is not None and request.args.get(
+            "polarity_model") not in EXPECTED_POLARITY_MODELS:
+        raise api_exceptions.RequestFormatException("Unknown polarity model", 400)
+    if request.args.get("type_model") is not None and request.args.get(
+            "type_model") not in EXPECTED_TYPE_MODELS:
+        raise api_exceptions.RequestFormatException("Unknown type model", 400)
+    if request.args.get("topic_model") is not None and request.args.get(
+            "topic_model") not in EXPECTED_TOPIC_MODELS:
+        raise api_exceptions.RequestFormatException("Unknown topic model", 400)
 
 
 
@@ -134,6 +146,9 @@ def analyze():
     multiprocess = request.args.get("multiprocess", "false").lower() == "true"
     sentiment_model = request.args.get("sentiment_model", None)
     feature_model = request.args.get("feature_model", None)
+    polarity_model = request.args.get("polarity_model", None)
+    type_model = request.args.get("type_model", None)
+    topic_model = request.args.get("topic_model", None)
 
     review_dto_list = process_request_body(request_body=request.get_json())
     analysis_service = AnalysisService()
@@ -142,12 +157,18 @@ def analyze():
         analyzed_reviews = analysis_service.analyze_review_sentences_multiprocess(
             sentiment_model=sentiment_model,
             feature_model=feature_model,
+            polarity_model=polarity_model,
+            type_model=type_model,
+            topic_model=topic_model,
             sentences=review_dto_list
         )
     else:
         analyzed_reviews = analysis_service.analyze_reviews(
             sentiment_model=sentiment_model,
             feature_model=feature_model,
+            polarity_model=polarity_model,
+            type_model=type_model,
+            topic_model=topic_model,
             review_dto_list=review_dto_list
         )
 

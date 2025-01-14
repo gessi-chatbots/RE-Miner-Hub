@@ -18,16 +18,16 @@ class TopicService():
         if response.status_code == 200:
             return response.json()
         elif response.status_code == 500:
-            raise Exception("Error in sentiment analysis request")
+            raise Exception("Error in topic analysis request")
         else:
-            raise Exception("Error in sentiment analysis request")
+            raise Exception("Error in topic analysis request")
 
     def extract_topic_form_sentence(self, topic_model, sentence):
         logging.info(f'Extracting topic with model: {topic_model} for sentence: "{sentence}"')
         if topic_model == 'SVM' or topic_model == 'MLP':
-            review = self.analyze_sentence_with_SVM_MLP(sentence)
+            review = self.analyze_sentence_with_SVM_MLP(topic_model, sentence)
             topic_dto = TopicDTO(review.get('topic'), languageModel=LanguageModelDTO(modelName=topic_model))
-            return sentiment_dto
+            return topic_dto
         else:
             logger.info(f'Topic model {topic_model} not supported')
             return None

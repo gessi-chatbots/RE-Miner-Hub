@@ -2,9 +2,13 @@ from src.dto.SentenceDTO import SentenceDTO
 from src.dto.SentimentDTO import SentimentDTO
 from src.dto.FeatureDTO import FeatureDTO
 from src.dto.ReviewResponseDTO import ReviewResponseDTO
+import logging
+
+logger = logging.getLogger(__name__)
 
 def extractReviewDTOsFromJson(reviews_dict):
     review_dto_list = []
+    logger.info(reviews_dict)
     for review in reviews_dict:
         id = review.get('reviewId')
         body = review.get('review')

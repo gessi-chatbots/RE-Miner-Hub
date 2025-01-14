@@ -2,6 +2,9 @@ import logging
 import src.service.review_service as revSv
 from src.service.emotion_service import EmotionService
 from src.service.feature_service import FeatureService
+from src.service.polarity_service import PolarityService
+from src.service.type_service import TypeService
+from src.service.topic_service import TopicService
 from src.dto import SentenceDTO
 from multiprocessing import Pool
 import time
@@ -35,13 +38,31 @@ def analyze_sentence_features(feature_model, sentence):
     return sentence
 
 def analyze_sentence_polarity(polarity_model, sentence):
-    pass
+    polarity_service = PolarityService()
+    start_time = time.time()
+    polarity = polarity_service.extract_polarity_form_sentence(polarity_model, sentence.text)
+    end_time = time.time()
+    polarity.extraction_time = end_time - start_time
+    sentence.polarityData = polarity
+    return sentence
 
 def analyze_sentence_type(type_model, sentence):
-    pass
+    type_service = TypeService()
+    start_time = time.time()
+    type = type_service.extract_type_form_sentence(type_model, sentence.text)
+    end_time = time.time()
+    type.extraction_time = end_time - start_time
+    sentence.typeData = type
+    return sentence
 
 def analyze_sentence_topic(topic_model, sentence):
-    pass    
+    topic_service = TopicService()
+    start_time = time.time()
+    topic = topic_service.extract_topic_form_sentence(topic_model, sentence.text)
+    end_time = time.time()
+    topic.extraction_time = end_time - start_time
+    sentence.topicData = topic
+    return sentence  
 
 def to_camel_case(sentence):
     words = sentence.split()
@@ -67,6 +88,7 @@ class AnalysisService():
                 if topic_model is not None:
                     analyze_sentence_topic(topic_model, sentence)
             sentence.extraction_time = time.time() - start
+            print(sentence)
         return sentences
     
     def analyze_review_sentences_multiprocess(self, sentiment_model, feature_model, polarity_model, type_model, topic_model, sentences):
@@ -106,7 +128,7 @@ class AnalysisService():
             analyzed_reviews.append(review_dto.to_dict())
         return analyzed_reviews
 
-    def analyze_reviews(self, sentiment_model, feature_model, review_dto_list):
+    def analyze_reviews(self, sentiment_model, feature_model, polarity_model, type_model, topic_model, review_dto_list):
         analyzed_reviews = []
         for review_dto in review_dto_list:
             revSv.check_review_splitting(review_dto)
@@ -114,6 +136,9 @@ class AnalysisService():
             analyzed_sentences = self.analyze_review_sentences(
                 sentiment_model,
                 feature_model,
+                polarity_model,
+                type_model,
+                topic_model,
                 review_dto.sentences
             )
 
@@ -122,10 +147,10 @@ class AnalysisService():
 
         return analyzed_reviews
 
-    def test_performance_analyze_reviews(self, sentiment_model, feature_model, review_dto_list):
+    def test_performance_analyze_reviews(self, sentiment_model, feature_model, polarity_model, type_model, topic_model, review_dto_list):
         analyzed_reviews = []
         for review_dto in review_dto_list:
-            analyzed_sentences = self.analyze_review_sentences_v1(sentiment_model, feature_model, review_dto.sentences)
+            analyzed_sentences = self.analyze_review_sentences_v1(sentiment_model, feature_model, polarity_model, type_model, topic_model, review_dto.sentences)
             review_dto.sentences = analyzed_sentences
             analyzed_reviews.append(review_dto.to_dict())
         return analyzed_reviews

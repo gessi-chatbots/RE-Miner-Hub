@@ -1,7 +1,7 @@
 from datetime import timedelta
 from src.dto.LanguageModelDTO import LanguageModelDTO
 
-class PolarityDTO:
+class TopicDTO:
     def __init__(self, topic: str, languageModel: LanguageModelDTO, extraction_time: timedelta = None):
         self.topic = topic
         self.languageModel = languageModel

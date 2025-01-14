@@ -25,9 +25,9 @@ class TypeService():
     def extract_type_form_sentence(self, type_model, sentence):
         logging.info(f'Extracting type with model: {type_model} for sentence: "{sentence}"')
         if type_model == 'BERT' or type_model == 'ROBERTA' or type_model == 'DISTILBERT':
-            review = self.analyze_sentence_with_BERT_ROBERTA_DISTILBERT(sentence)
+            review = self.analyze_sentence_with_BERT_ROBERTA_DISTILBERT(type_model, sentence)
             type_dto = TypeDTO(review.get('type'), languageModel=LanguageModelDTO(modelName=type_model))
-            return sentiment_dto
+            return type_dto
         else:
             logger.info(f'Type model {type_model} not supported')
             return None

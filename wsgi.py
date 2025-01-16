@@ -115,13 +115,13 @@ def process_request_body(request_body):
     else:
         body = request_body
 
-    if isinstance(body, list):
-        try:
-            reviews = body[0]['reviews']
-        except (IndexError, KeyError):
-            raise api_exceptions.RequestFormatException("Error in extracting reviews from list format", 400)
-    else:
-        reviews = body
+    #if isinstance(body, list):
+    #    try:
+    #        reviews = body[0]['reviews']
+    #    except (IndexError, KeyError):
+    #        raise api_exceptions.RequestFormatException("Error in extracting reviews from list format", 400)
+    #else:
+    reviews = body
     return extractReviewDTOsFromJson(reviews_dict=reviews)
 #---------------------------------------------------------------------------
 #   API health check

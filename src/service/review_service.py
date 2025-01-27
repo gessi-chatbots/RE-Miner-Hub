@@ -33,7 +33,7 @@ def extend_and_split_review(review):
     for index, sentence in enumerate(sentences):
         sentence_id = f"{review.reviewId}_{index}"
         text = sentence
-        review.sentences.append(SentenceDTO(id=sentence_id, featureData=None, sentimentData=None, text=text))
+        review.sentences.append(SentenceDTO(id=sentence_id, featureData=None, sentimentData=None, polarityData=None, typeData=None, topicData=None, text=text))
 
 
 def split_review(review_text):

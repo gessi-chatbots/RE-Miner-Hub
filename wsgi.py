@@ -5,7 +5,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 from src.service.analysis_service import AnalysisService
 from src.service.performance_service import PerformanceService
 from src.exceptions import api_exceptions
-from src.utils import extractReviewDTOsFromJson, extractReviewDTOsFromJsonAux
+from src.utils import extractReviewDTOsFromJson
 import logging
 import time
 
@@ -59,6 +59,18 @@ def handle_request_exception(exception):
     return make_response(jsonify({'message': exception.message}), exception.code)
 
 
+@app.errorhandler(500)
+def handle_internal_server_error(error):
+    logging.error(f"Internal Server Error: {str(error)}", exc_info=True)
+    return make_response(jsonify({'message': 'Internal Server Error', 'error': str(error)}), 500)
+
+
+@app.errorhandler(Exception)
+def handle_generic_exception(error):
+    logging.error(f"Unhandled Exception: {str(error)}", exc_info=True)
+    return make_response(jsonify({'message': 'Internal Server Error', 'error': str(error)}), 500)
+
+
 #---------------------------------------------------------------------------
 #   API
 #---------------------------------------------------------------------------
@@ -67,21 +79,31 @@ EXPECTED_SENTIMENT_MODELS = ["BERT", "BETO", "GPT-3.5"]
 EXPECTED_FEATURE_MODELS = ["transfeatex", "t-frex-bert-base-uncased", "t-frex-bert-large-uncased",
                            "t-frex-roberta-base",
                            "t-frex-roberta-large", "t-frex-xlnet-base-cased", "t-frex-xlnet-large-cased"]
+EXPECTED_POLARITY_MODELS = ["SVM", "MLP"]
+EXPECTED_TYPE_MODELS = ["BERT", "ROBERTA", "DISTILBERT"]
+EXPECTED_TOPIC_MODELS = ["SVM", "MLP"]
 
 
 def validate_request_args(request_args):
-    if not request_args \
-            or ('sentiment_model' not in request_args.keys() and 'feature_model' not in request_args.keys()):
-        raise api_exceptions.RequestFormatException("Lacking model and textual data in proper tag.", 400)
-    if 'sentiment_model' not in request_args.keys() and 'feature_model' not in request_args.keys():
-        raise api_exceptions.RequestFormatException("Lacking model in proper tag.", 400)
-    if request.args.get("sentiment_model") is not None and request.args.get(
-            "sentiment_model") not in EXPECTED_SENTIMENT_MODELS:
-        raise api_exceptions.RequestFormatException("Unknown sentiment model", 400)
-    if request.args.get("feature_model") is not None and request.args.get(
-            "feature_model") not in EXPECTED_FEATURE_MODELS:
-        raise api_exceptions.RequestFormatException("Unknown feature model", 400)
+    # Check if at least one model type is present
+    model_present = any(model + '_model' in request_args.keys() 
+                       for model in ['sentiment', 'feature', 'polarity', 'type', 'topic'])
+    if not request_args or not model_present:
+        raise api_exceptions.RequestFormatException("At least one model type must be specified.", 400)
 
+    # Validate each model if present
+    model_validations = {
+        'sentiment_model': EXPECTED_SENTIMENT_MODELS,
+        'feature_model': EXPECTED_FEATURE_MODELS,
+        'polarity_model': EXPECTED_POLARITY_MODELS,
+        'type_model': EXPECTED_TYPE_MODELS,
+        'topic_model': EXPECTED_TOPIC_MODELS
+    }
+
+    for model_name, valid_values in model_validations.items():
+        model_value = request.args.get(model_name)
+        if model_value is not None and model_value not in valid_values:
+            raise api_exceptions.RequestFormatException(f"Unknown {model_name.replace('_', ' ')}", 400)
 
 
 def process_request_body(request_body):
@@ -93,23 +115,14 @@ def process_request_body(request_body):
     else:
         body = request_body
 
-    if isinstance(body, list):
-        try:
-            # Check the shape of the first review to determine which function to use
-            first_review = body[0]
-            if 'applicationId' in first_review and 'date' in first_review:
-                # Use Aux function for this shape
-                return extractReviewDTOsFromJsonAux(reviews_dict=body)
-            elif 'reviewId' in first_review and 'review' in first_review:
-                # Use the main function for this shape
-                return extractReviewDTOsFromJson(reviews_dict=body)
-            else:
-                raise api_exceptions.RequestFormatException("Unexpected review format", 400)
-        except (IndexError, KeyError):
-            raise api_exceptions.RequestFormatException("Error in extracting reviews from list format", 400)
-    else:
-        raise api_exceptions.RequestFormatException("Unsupported request format", 400)
-
+    #if isinstance(body, list):
+    #    try:
+    #        reviews = body[0]['reviews']
+    #    except (IndexError, KeyError):
+    #        raise api_exceptions.RequestFormatException("Error in extracting reviews from list format", 400)
+    #else:
+    reviews = body
+    return extractReviewDTOsFromJson(reviews_dict=reviews)
 #---------------------------------------------------------------------------
 #   API health check
 #---------------------------------------------------------------------------
@@ -136,46 +149,50 @@ def test_performance():
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
-    logging.info("Analyze request")
+    try:
+        logging.info("Analyze request")
+        validate_request_args(request.args)
 
-    validate_request_args(request.args)
+        multiprocess = request.args.get("multiprocess", "false").lower() == "true"
+        sentiment_model = request.args.get("sentiment_model", None)
+        feature_model = request.args.get("feature_model", None)
+        polarity_model = request.args.get("polarity_model", None)
+        type_model = request.args.get("type_model", None)
+        topic_model = request.args.get("topic_model", None)
 
-    sentiment_model = request.args.get("sentiment_model", None)
-    feature_model = request.args.get("feature_model", None)
+        review_dto_list = process_request_body(request_body=request.get_json())
+        analysis_service = AnalysisService()
+        starting_time = time.time()
+        if multiprocess:
+            analyzed_reviews = analysis_service.analyze_review_sentences_multiprocess(
+                sentiment_model=sentiment_model,
+                feature_model=feature_model,
+                polarity_model=polarity_model,
+                type_model=type_model,
+                topic_model=topic_model,
+                sentences=review_dto_list
+            )
+        else:
+            analyzed_reviews = analysis_service.analyze_reviews(
+                sentiment_model=sentiment_model,
+                feature_model=feature_model,
+                polarity_model=polarity_model,
+                type_model=type_model,
+                topic_model=topic_model,
+                review_dto_list=review_dto_list
+            )
 
-    sibling_threshold = request.args.get("sibling_threshold", None)
-    if sibling_threshold is not None:
-        try:
-            sibling_threshold = float(sibling_threshold)
-        except ValueError:
-            return make_response(jsonify({"error": "Invalid sibling_threshold value"}), 400)
+        end_time = time.time()
+        logging.info(f"Execution time = {end_time - starting_time}s")
 
-    review_dto_list = process_request_body(request_body=request.get_json())
-    app_name = request.get_json()[0].get('applicationId')
-    analysis_service = AnalysisService()
-    analysis_starting_time = time.time()
-
-    analyzed_reviews = analysis_service.analyze_reviews(
-        sentiment_model=sentiment_model,
-        feature_model=feature_model,
-        review_dto_list=review_dto_list,
-    )
-
-    analysis_ending_time = time.time()
-    logging.info(f"Execution time = {analysis_ending_time - analysis_starting_time}s")
-    clustering_starting_time = time.time()
-
-    analysis_service.clusterize_reviews(app_name, analyzed_reviews, sibling_threshold)
-    clustering_ending_time = time.time()
-    logging.info(f"Clustering time = {clustering_ending_time - clustering_starting_time}s")
-
-
-    return make_response(jsonify({
-        "analyzed_reviews": analyzed_reviews,
-        "execution_time": (analysis_ending_time - analysis_starting_time),
-        "clustering_time": (clustering_ending_time - clustering_starting_time),
-        "sibling_threshold": sibling_threshold
-    }), 200)
+        return make_response(jsonify({
+            "analyzed_reviews": analyzed_reviews,
+            "multiprocess": multiprocess,
+            "execution_time": (end_time - starting_time)
+        }), 200)
+    except Exception as e:
+        logging.error(f"Error in analyze endpoint: {str(e)}", exc_info=True)
+        raise
 
 
 @app.route('/analyze/kg', methods=['POST'])
